@@ -4,7 +4,9 @@
 ############ TO USE IT WRITE ./let1.sh -c [NUMBER] to code NUMBER or ./let1.sh -d [NUMBER] to decode NUMBER ######
 
 # reading input into an array
-while read -n 1 c; do array+=($c); done <<< "$2"
+while read -n 1 c; do
+	array+=($c)
+done <<< "$2"
 # setting length of input array
 length=${#array[@]}
 
@@ -21,15 +23,14 @@ while [ -n "$1" ]; do
       exit 1
     fi
 		for(( i = 0; i < $length; i++ )); do
-
-
-
 			# creating num as a single number
 			num=$((${array[$i]}))
 			# creating bin as a binary interpretation of num
 			bin=$(echo "obase=2; $num" | bc)
 			# transforming bin to an array bin_arr
-			while read -n 1 c; do bin_arr+=($c); done <<< "$bin"
+			while read -n 1 c; do
+				bin_arr+=($c)
+			done <<< "$bin"
 			# getting length of bin_arr
 			result_len=${#bin_arr[@]}
 		
