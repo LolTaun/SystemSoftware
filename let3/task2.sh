@@ -61,11 +61,10 @@ for ((i = 1; i < ${#input[@]}; i++)); do
     echo -n ${word1[$j]}
   done
   echo -n " "
-
   # Code block for the last word
   if (($i == ((${#input[@]} - 1)))); then
     # loop to lowercase or uppercase and then print last word
-    for ((j = 0; j < ${#word1[@]}; j++)); do
+    for ((j = 0; j < ${#word2[@]}; j++)); do
       symbol_code=$(printf "%d\n" "'${word2[$j]}")
       # uppercase
       if (($i % 2)); then
@@ -78,7 +77,9 @@ for ((i = 1; i < ${#input[@]}; i++)); do
         fi
       fi
       # print last word
-      word2[$j]=$(printf "\x$(printf %x $symbol_code)")
+      if(($symbol_code != 0)); then
+        word2[$j]=$(printf "\x$(printf %x $symbol_code)")
+      fi
       echo -n ${word2[$j]}
     done
   fi
