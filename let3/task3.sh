@@ -16,7 +16,7 @@ done <<<$1
 for ((index = 0; index < ${#array[@]}; index++)); do
   smallest_index=$index
   for ((i = $(($index + 1)); i < ${#array[@]}; i++)); do
-    if ((${array[$i]} < ${array[$smallest_index]})); then
+    if ((${array[$i]} <= ${array[$smallest_index]})); then
       smallest_index=$i
     fi
   done
