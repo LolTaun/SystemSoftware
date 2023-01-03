@@ -1,0 +1,807 @@
+\documentclass[14pt, a4paper]{article}
+\usepackage[russian]{babel}
+\usepackage{graphicx}
+\usepackage{layout}
+\usepackage[14pt]{extsizes}
+\usepackage{amssymb}
+\usepackage{relsize}
+
+\setcounter{tocdepth}{4}
+\setcounter{secnumdepth}{4}
+
+\usepackage{xcolor}
+\usepackage{hyperref}
+
+\usepackage{listings}
+
+ % Цвета для гиперссылок
+\definecolor{linkcolor}{HTML}{000000} % цвет ссылок
+\definecolor{urlcolor}{HTML}{000000} %цвет гиперссылок
+
+\hypersetup{pdfstartview=FitH,  linkcolor=linkcolor,urlcolor=urlcolor, colorlinks=true}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.97,0.97,0.97}
+
+%таблица
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,
+    frame=single,                                                    
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2,
+    mathescape=true
+}
+
+\lstset{style=mystyle}
+
+%Разметка страницы
+\oddsidemargin = 0pt
+\marginparwidth = 45pt 
+\textwidth = 467pt
+\textheight = 716pt
+\topmargin = 0pt 
+\footskip = 30pt 
+\headheight = 0pt 
+\headsep = 0pt 
+
+\begin{document}
+\begin{titlepage}
+    \topmargin=216pt
+    \newpage
+    \hangindent=0.7cm
+    \huge ИУ-10\\
+    Системное\\
+    Программное\\
+    Обеспечение\\
+    Администрирование Linux\\
+    \textbf{Работа с сетью в Linux}
+
+    \vspace{10cm}
+
+    \begin{center}
+        \small\textit{Москва, 2022}
+    \end{center}
+\end{titlepage}
+
+\section*{На этом уроке} 
+\addcontentsline{toc}{section}{На этом уроке}
+
+\begin{enumerate}
+    \item Обзор настроек, работающих на данный момент
+    \item Обзор утилит для получения информации о сети (ip, ifconfig)
+    \item Настройка сети в ОС Linux
+    \item Сбор сетевого дампа и его анализ
+\end{enumerate}
+
+\tableofcontents
+\newpage
+
+\section*{Основы сети} 
+\addcontentsline{toc}{section}{Основы сети}
+
+\subsection*{IP адрес} 
+\addcontentsline{toc}{subsection}{IP адрес}
+
+Для настройки сети серверу нужен уникальный адрес и для этого используются IP-адреса. В
+настоящее время актуальны две версии:
+\begin{itemize}
+    \item[-] Адреса IPv4: основаны на 32-битных значениях и имеют четыре октета, разделенных точками,
+    например \underbar{\textit{192.168.10.100}}.
+    \item[-] Адреса IPv6: основаны на 128-битных значениях и записываются в восьми группах
+    шестнадцатеричных чисел по 16 бит каждая, разделенн- 
+    ых двоеточиями. Адрес IPv6 может выглядеть как:\\
+    \underbar{\textit{fe80:badb:abe01:45bc:34ad:1313:6723:8798}}.
+\end{itemize}
+
+Набор IP-адресов объединяют в сеть, в пределах которой компьютеры взаимодействуют почти
+напрямую. Для связи между сетями используется маршрутизатор. Маршрутизатор - это машина (часто
+для этой цели создано специальное оборудование), которая соединяет сети друг с другом.\\
+
+Чтобы узнать, к какой сети принадлежит компьютер, для каждого IP-адреса используется маска
+подсети. Маска подсети определяет, какая часть сетевого адреса указывает на сеть, а какая - на узел
+(сервер, компьютер).
+
+\subsection*{MAC-адрес} 
+\addcontentsline{toc}{subsection}{MAC-адрес}
+
+IP-адреса - это адреса, которые позволяют узлам связываться с любым другим узлом в Интернете.
+Однако это не единственные используемые адреса. Каждая сетевая карта также имеет 6-байтовый
+MAC-адрес, предназначенный для использования в локальной сети (вплоть до первого
+обнаруженного маршрутизатора); они не могут использоваться для связи между узлами,
+находящимися в разных сетях. MAC-адреса важны, потому что они помогают компьютерам найти
+конкретную сетевую карту, которой принадлежит IP-адрес.\\
+
+Примером MAC-адреса является \underbar{\textit{00:0c:29:7d:9b:17}}. Обратите внимание, что каждый MAC-адрес
+состоит из двух частей. Первая половина - это идентификатор поставщика, а вторая - уникальный
+идентификатор узла. Идентификаторы поставщиков зарегистрированы, и, используя
+зарегистрированные идентификаторы поставщиков, можно выделить уникальные MAC-адреса.
+
+\subsection*{Порт} 
+\addcontentsline{toc}{subsection}{Порт}
+
+На серверах Вы обычно будете запускать службы, такие как Веб-сервер или TFTP-сервер. Для
+идентификации этих служб используются адреса портов. У каждой службы есть определенный адрес
+порта, например порт 80 для протокола HTTP или порт 22 для Secure Shell (SSH), и при сетевой связи
+отправитель и получатель используют адреса портов. Таким образом, существует адрес порта
+назначения, а также адрес порта источника, участвующие в сетевых коммуникациях.
+
+\section*{Управление конфигурацией сети} 
+\addcontentsline{toc}{section}{Управление конфигурацией сети}
+
+Сетевые адреса можно назначить двумя способами:
+\begin{itemize}
+    \item[-] Фиксированные IP-адреса: полезно для серверов, которые всегда должны быть доступны по
+    одному и тому же IP-адресу.
+    \item[-] Динамически назначаемые IP-адреса: полезно для устройств конечных пользователей и для
+    экземпляров в облачной среде. Для динамического назначения IP-адресов обычно
+    используется сервер протокола динамической конфигурации хоста (DHCP). 
+\end{itemize}
+
+\subsection*{Просмотр состояния сетевого стека} 
+\addcontentsline{toc}{subsection}{Просмотр состояния сетевого стека}
+
+\subsubsection*{Параметры интерфейсов} 
+\addcontentsline{toc}{subsubsection}{Параметры интерфейсов}
+
+Прежде чем вы настраивать сеть, вы должны знать, как проверить текущую конфигурацию. Полезной
+информацией является:
+\begin{itemize}
+    \item[-] IP-адрес и маска подсети
+    \item[-] Маршрутизация
+    \item[-] Наличие портов и сервисов 
+\end{itemize}
+
+Чтобы проверить настройки сети, необходимо использовать утилиту ip. Утилита ip - это современная
+утилита, с помощью которой можно отслеживать многие аспекты сети.
+\begin{itemize}
+    \item[-] ip addr для настройки и мониторинга сетевых адресов.
+    \item[-] ip route для настройки и отслеживания информации о маршрутизации.
+    \item[-] IP-ссылку для настройки и мониторинга состояния сетевого соединения. 
+\end{itemize}
+
+\newpage
+
+Рассмотрим вывод команды \colorbox{backcolour}{ip addr show}
+
+\vspace{0.3cm}
+\begin{lstlisting}
+root@server:$\sim$# ip addr show
+
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group
+default qlen 1000
+
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+    
+    inet 127.0.0.1/8 scope host lo
+
+       valid_lft forever preferred_lft forever
+       
+    inet6 ::1/128 scope host
+
+       valid_lft forever preferred_lft forever
+
+2: enp0s3: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state 
+UP group default qlen 1000
+
+       link/ether 08:00:27:05:9e:a6 brd ff:ff:ff:ff:ff:ff
+
+       inet 192.168.1.84/24 brd 192.168.1.255 scope global dynamic enp0s3
+
+          valid_lft 83818sec preferred_lft 83818sec
+
+       inet6 fe80::a00:27ff:fe05:9ea6/64 scope link
+
+          valid_lft forever preferred_lft forever
+$$
+\end{lstlisting}
+\vspace{0.2cm}
+
+
+В результате этой команды можно ознакомиться со списком всех сетевых интерфейсов в Linux.
+Обычно существуют как минимум два интерфейса, но в определенных случаях интерфейсов может
+быть намного больше. Некоторые процессы используют протокол IP для внутренней связи. По этой
+причине вы всегда найдете интерфейс \textbf{loopback}, с адресом 127.0.0.1. Важная часть вывода команды
+относится к встроенной карте Ethernet. Команда показывает следующие элементы:
+
+\begin{itemize}
+    \item[-] Текущее состояние: наиболее важной частью этой строки является \textbf{UP}, которое показывает,
+    что эта сетевая карта в настоящее время включена и доступна.
+    \item[-] Конфигурация MAC-адреса: это уникальный MAC-адрес, который устанавливается для каждой
+    сетевой карты. Вы можете увидеть сам MAC-адрес (08:00:27:05:9e:a6), а также
+    соответствующий широковещательный адрес.
+    \item[-] Конфигурация IPv4: в этой строке отображается текущий установленный IP-адрес, а также
+    используемая маска подсети. Вы также можете увидеть широковещательный адрес, который
+    используется для этой конфигурации сети. Обратите внимание, что на некоторых интерфейсах
+    вы можете найти несколько адресов IPv4. \colorbox{backcolour}{dynamic} сигнализирует об использовании
+    протокола DHCP.
+    \item[-] Конфигурация IPv6: в этой строке отображается текущий адрес IPv6 и его конфигурация. Даже
+    если вы ничего не настроили, каждый интерфейс автоматически получает адрес IPv6, который
+    можно использовать для связи в локальной сети.
+\end{itemize}
+
+Команда \colorbox{backcolour}{ip link show} в сочетании с параметром -s, покажет текущую статистику о переданных и
+полученных пакетах, а также обзор ошибок, возникших во время передачи пакетов.
+
+\vspace{0.3cm}
+\begin{lstlisting}
+root@server:$\sim$# ip -s link show
+
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN mode
+DEFAULT group default qlen 1000
+
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+
+    RX: bytes packets errors dropped overrun mcast
+
+    13674      1430     0      0       0       0
+
+    TX: bytes packets errors dropped carrier collsns
+
+    13674      1430     0      0       0       0
+
+2: enp0s3: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state 
+UP mode DEFAULT group default qlen 1000
+
+    link/ether 08:00:27:05:9e:a6 brd ff:ff:ff:ff:ff:ff
+
+    RX: bytes packets errors dropped overrun mcast
+
+    103290692 127189    0      33      0       1386
+
+    TX: bytes packets errors dropped carrier collsns
+
+    823135     6204     0      0       0        0
+$$
+\end{lstlisting}
+\vspace{0.2cm}
+
+\textbf{Примечание!} \underbar{\textit{Подобную информацию можно получить с помощью}}\\
+\underbar{\textit{команды \colorbox{backcolour}{ifconfig}.}}\\
+
+Один из важных аспектов сети - маршрутизация, которая требуется для связи между узлами в
+отличающихся сетях. В каждой сети есть маршрутизатор по умолчанию (также называемый шлюзом),
+и вы можете увидеть, какой маршрутизатор используется в качестве маршрутизатора по умолчанию,
+используя команду \colorbox{backcolour}{ip route show}.
+
+\newpage
+
+\begin{lstlisting}
+root@server:$\sim$# ip route show
+
+default via 192.168.1.254 dev enp0s3 proto dhcp src 192.168.1.84 metric 
+100
+
+192.168.1.0/24 dev enp0s3 proto kernel scope link src 192.168.1.84
+
+192.168.1.254 dev enp0s3 proto dhcp scope link src 192.168.1.84 metric 100
+$$
+\end{lstlisting}
+
+Самая важная часть - это первая строка. Она показывает, что маршрут по умолчанию проходит через
+(“via”) IP-адрес \textbf{192.168.1.254}, а также показывает, что для адресации этого IP-адреса необходимо
+использовать сетевой интерфейс \textbf{enp0s3}, и что этот маршрут был назначен DHCP-сервером. Метрика
+используется в случае, если к одному месту назначения доступно несколько маршрутов. Маршрут с
+наименьшей метрикойа предпочтителен.\\
+
+Последующие строки идентифицируют локальные подключенные сети. При загрузке запись также
+добавляется для каждой локальной сети, и в этом примере они относятся к сетям \textbf{192.168.1.0/24}. Эти
+маршруты генерируются автоматически и не нуждаются в управлении.
+
+\subsection*{Конфигурация сети} 
+\addcontentsline{toc}{subsection}{Конфигурация сети}
+
+С помощью утилит можно не только просматривать настройки но и изменять их. К примеру, \colorbox{backcolour}{ifconfig
+eth0 192.168.0.100 netmask 255.255.255.0} назначит новый IP адрес, а \colorbox{backcolour}{route add default
+gw 192.168.0.254} выставит шлюз по умолчанию. Все настройки, выполненные таким образом, будут
+удалены в момент перезагрузки. Для “постоянной” конфигурации используется Netplan.
+
+\subsubsection*{Netplan} 
+\addcontentsline{toc}{subsubsection}{Netplan}
+
+Netplan - это утилита для простой настройки сети в системе Linux. Описание требуемых сетевых
+интерфейсов и того, как каждый из них должен работать, производится с помощью формата YAML. Yet
+Another Markup Language (YAML) - «дружественный» формат сериализации данных, основное
+внимание в котором необходимо обращать на отступы. Из этого описания Netplan генерирует всю
+необходимую конфигурацию для выбранного вами инструмента рендеринга.\\
+
+Конфигурация создается администраторами, установщиками или другими способами развертывания
+ОС и находится в каталоге \textbf{/etc/netplan/}. Во время загрузки Netplan считывает содержимое файлов и
+генерирует определенные конфигурацию серверной части в \textbf{/run}, чтобы передать управление
+устройствами сетевому демону. Давайте рассмотрим конфигурацию нашего сервера:
+
+\vspace{0.3cm}
+\begin{lstlisting}
+root@server:$\sim$# cat /etc/netplan/00-installer-config.yaml
+# This is the network config written by 'subiquity'
+network:
+  ethernets:
+    enp0s3:
+      dhcp4: true
+  version: 2
+$$
+\end{lstlisting}
+\vspace{0.2cm}
+
+\begin{itemize}
+    \item[-] network — это блок начало конфигурации
+    \item[-] renderer: networkd — сетевой менеджер, который будет использоваться для обработки
+    (networkd или Network Manager)
+    \item[-] version: 2 — версия формата YAML
+    \item[-] ethernets: — блок говорит о том, что описываются ethernet интерфейсы.
+    \item[-] enp0s3: — имя сетевого адаптера.
+    \item[-] dhcp4: — состояние протокола DHCP
+\end{itemize}
+
+Как можно понять, на интерфейсах включен протокол DHCP. Использование этого протокола полезно
+для устройств конечных пользователей и для экземпляров в облачной среде, но для серверных
+версий рекомендуется использовать статическое назначение адресов.\\
+
+\textbf{Важно!} \underbar{\textit{Перед началом изменения настроек сети рекомендуется сде-}} \\
+\underbar{\textit{лать бэкап существующих файлов}}.\\
+
+Изменим содержимое существующего файла, после чего применим с помощью \colorbox{backcolour}{netplan apply}.
+Ответ на ввод команды будет получен только в случае наличия ошибок в файле.
+
+\vspace{0.3cm}
+\begin{lstlisting}
+network:
+    version: 2
+    renderer: networkd
+    ethernets:
+        enp0s3:
+            addresses:
+                - 192.168.1.84/24
+                - 192.168.1.87/24
+            gateway4: 192.168.1.254
+            nameservers:
+                addresses:
+                  - 192.168.1.254
+
+root@server:$\sim$# netplan apply
+root@server:$\sim$#
+$$
+\end{lstlisting}
+\vspace{0.2cm}
+
+С помощью опций \colorbox{backcolour}{addresses} и \colorbox{backcolour}{gateway4} указываются адреса сетевой карты и шлюза по
+умолчанию. В блоке \colorbox{backcolour}{nameservers} отображены настройки DNS серверов. В \colorbox{backcolour}{ip addr show} исчезла
+пометка \colorbox{backcolour}{dynamic}, и теперь на интерфейсе назначены сразу два адреса.
+
+\vspace{0.3cm}
+\begin{lstlisting}
+2: enp0s3: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state 
+UP group default qlen 1000
+    link/ether 08:00:27:05:9e:a6 brd ff:ff:ff:ff:ff:ff
+    inet 192.168.1.84/24 brd 192.168.1.255 scope global enp0s3
+        valid_lft forever preferred_lft forever
+    inet 192.168.1.87/24 brd 192.168.1.255 scope global secondary enp0s3
+        valid_lft forever preferred_lft forever
+    inet6 fe80::a00:27ff:fe05:9ea6/64 scope link
+        valid_lft forever preferred_lft forever
+\end{lstlisting}
+\vspace{0.2cm}
+
+С помощью netplan можно по необходимости настраивать и маршрутизацию.
+
+\vspace{0.3cm}
+\begin{lstlisting}
+root@server:$\sim$# cat /etc/netplan/00-installer-config.yaml
+network:
+    version: 2
+    renderer: networkd
+    ethernets:
+        enp0s3:
+            addresses:
+                - 192.168.1.84/24
+            gateway4: 192.168.1.254
+            nameservers:
+                addresses:
+                  - 192.168.1.254
+            routes:
+                 - to: 8.8.8.8/32
+                   via: 192.168.1.254
+                   metric: 200
+
+root@server:$\sim$# ip route show
+default via 192.168.1.254 dev enp0s3 proto static
+default via 192.168.1.254 dev enp0s3 proto static metric 200
+192.168.1.0/24 dev enp0s3 proto kernel scope link src 192.168.1.84
+\end{lstlisting}
+\vspace{0.2cm}
+
+После добавления маршрутов в выводе \colorbox{backcolour}{ip route show} появилась вторая запись с метрикой 200.\\
+
+Генерируемые имена не всегда несут смысловую нагрузку. Для их изменения можно также
+воспользоваться возможностями netplan. В файл понадобится добавить критерии соотношений
+(\colorbox{backcolour}{match}) конфигурации с реальным устройство через MAC-адрес и указание имя в параметр
+\colorbox{backcolour}{set-name}.
+
+\vspace{0.3cm}
+\begin{lstlisting}
+root@server:$\sim$# cat /etc/netplan/00-installer-config.yaml
+network:
+    version: 2
+    renderer: networkd
+    ethernets:
+        enp0s3:
+            match:
+                macaddress: 08:00:27:05:9e:a6
+            set-name: eth0
+            addresses:
+                - 192.168.1.84/24
+            gateway4: 192.168.1.254
+            nameservers:
+                addresses:
+                  - 192.168.1.254
+            routes:
+                 - to: 8.8.8.8/0
+                   via:
+                   192.168.1.254
+                   metric: 200
+root@server:$\sim$# ip a show
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group
+default qlen 1000
+    inet 127.0.0.1/8 scope host lo
+        valid_lft forever preferred_lft forever
+    inet6 ::1/128 scope host
+        valid_lft forever preferred_lft forever
+2: $\mathbf{eth0:}$ <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state 
+UP group default qlen 1000
+    link/ether 08:00:27:05:9e:a6 brd ff:ff:ff:ff:ff:ff
+    inet 192.168.1.84/24 brd 192.168.1.255 scope global eth0
+        valid_lft forever preferred_lft forever
+    inet6 fe80::a00:27ff:fe05:9ea6/64 scope link
+        valid_lft forever preferred_lft forever
+$$
+\end{lstlisting}
+\vspace{0.2cm}
+
+\textbf{Примечание!} \underbar{\textit{Для изменения имени понадобится перезагрузка сиc-}}\\
+\underbar{\textit{темы}.}
+
+\newpage
+
+\section*{Проверка работы сети} 
+\addcontentsline{toc}{section}{Проверка работы сети}
+
+\subsection*{Ping} 
+\addcontentsline{toc}{subsection}{Ping}
+
+Ping - это служебная программа, используемая для проверки доступности хоста в сети по IP адресу.
+Эта утилита доступна практически для всех операционных систем, имеющих сетевые возможности, в
+том числе и Linux. Ping измеряет RTT(Round-Trip Time) сообщений, отправленных с исходного
+компьютера на конечный хост.
+
+\vspace{0.3cm}
+\begin{lstlisting}
+root@server:$$\sim# ping 8.8.8.8
+PING 8.8.8.8 (8.8.8.8) 56(84) bytes of data.
+64 bytes from 8.8.8.8: icmp_seq=1 ttl=109 time=22.6 ms
+64 bytes from 8.8.8.8: icmp_seq=2 ttl=109 time=26.1 ms
+64 bytes from 8.8.8.8: icmp_seq=3 ttl=109 time=23.9 ms
+64 bytes from 8.8.8.8: icmp_seq=4 ttl=109 time=24.2 ms
+^C
+--- 8.8.8.8 ping statistics ---
+4 packets transmitted, 4 received, 0% packet loss, time 3008ms
+rtt min/avg/max/mdev = 22.641/24.218/26.094/1.236 ms
+$$
+\end{lstlisting}
+\vspace{0.2cm}
+
+По умолчанию утилита будет отправлять сообщения, пока не будет передана команда на прерывание.
+С помощью ключа \textbf{-c} можно указать ограничение, а с помощью \textbf{-i} интервал.
+
+\vspace{0.3cm}
+\begin{lstlisting}
+root@server:$\sim$# ping -i 0.1 -c 5 8.8.8.8
+PING 8.8.8.8 (8.8.8.8) 56(84) bytes of data.
+64 bytes from 8.8.8.8: icmp_seq=1 ttl=109 time=23.8 ms
+64 bytes from 8.8.8.8: icmp_seq=2 ttl=109 time=23.0 ms
+64 bytes from 8.8.8.8: icmp_seq=3 ttl=109 time=23.8 ms
+64 bytes from 8.8.8.8: icmp_seq=4 ttl=109 time=23.6 ms
+64 bytes from 8.8.8.8: icmp_seq=5 ttl=109 time=23.5 ms
+
+--- 8.8.8.8 ping statistics ---
+5 packets transmitted, 5 received, 0% packet loss, time 404ms
+rtt min/avg/max/mdev = 23.025/23.528/23.780/0.272 ms
+\end{lstlisting}
+\vspace{0.2cm}
+
+\subsection*{Порты приложений} 
+\addcontentsline{toc}{subsection}{Порты приложений}
+
+Сетевые проблемы могут быть связаны с локальным IP-адресом и настройками маршрутизатора, но
+также могут быть связаны с сетевыми портами, которые недоступны на вашем сервере или на
+удаленном сервере. Чтобы проверить доступность портов на вашем сервере, вы можете использовать
+команду \colorbox{backcolour}{netstat} или более новую команду \colorbox{backcolour}{ss}, которая обеспечивает ту же функциональность.
+\newpage
+
+\begin{lstlisting}
+root@server:~# netstat -tulpan
+Active Internet connections (servers and
+Proto Recv-Q Send-Q Local Address           Foreign               Stat
+PID/Program name
+tcp          0      0 127.0.0.53:53         0.0.0.0:*
+             LISTEN
+582/systemd-resolve
+tcp          0      0 0.0.0.0:22            0.0.0.0:*
+             LISTEN
+633/sshd: /usr/sbin
+tcp          0    0 192.168.1.84:22     192.168.1.73:60111
+633/sshd: /usr/sbin
+udp          0                0 127.0.0.53:53                  0.0.0.0:
+582/systemd-resolve
+udp6                   0                0 fe80::a00:27ff:fe05:546   :::*
+580/systemd-network
+root@server:$\sim$#
+$$
+\end{lstlisting}
+\vspace{0.2cm}
+
+Набрав \colorbox{backcolour}{ss -lt}, вы увидите все прослушивающие TCP-порты в локальной системе
+
+\vspace{0.3cm}
+\begin{lstlisting}
+root@server:~# ss -lt
+State               Recv-Q               Send-Q                     Local
+Address:Port                            Peer                    Process
+LISTEN                            0                                  4096
+127.0.0.53%lo:domain                               0.0.0.0:
+LISTEN                            0                                   128
+0.0.0.0:ssh                                  0.0.0.0:
+LISTEN                            0                                   128
+[::]:ssh                                     [::]:
+
+
+\end{lstlisting}
+\vspace{0.2cm}
+
+Обратите внимание, какие из портов прослушиваются. Некоторые порты прослушивают только адрес
+loopback IPv4 127.0.0.1 или IPv6 :: 1, что означает, что они доступны только локально и недоступны с
+внешних компьютеров. Другие порты прослушивают *, что означает все адреса IPv4, или ::: *, который
+представляет все порты на всех адресах IPv6.
+
+\subsubsection*{Netcat} 
+\addcontentsline{toc}{subsubsection}{Netcat}
+
+Для проверки портов на удаленном сервере следует воспользоваться утилитой Netcat и командой nc.
+Netcat может осуществлять соединение по TCP портам, а также посылать и принимать TCP,UDP
+трафик.\\
+
+Для простой проверки доступности удаленного порта воспользуйтесь \colorbox{backcolour}{nc -zvw1}.
+
+\newpage
+
+\begin{lstlisting}
+root@server:$\sim$# nc -zvw1 8.8.8.8 80
+nc: connect to 8.8.8.8 port 80 (tcp) timed out: Operation now in progress
+root@server:$\sim$# nc -zvw1 8.8.8.8 53
+Connection to 8.8.8.8 53 port [tcp/domain] succeeded!
+\end{lstlisting}
+\vspace{0.2cm}
+
+Чтобы послать послать UDP пакеты, воспользуйтесь опцией -u.
+
+\vspace{0.3cm}
+\begin{lstlisting}
+root@server:$\sim$# root@server:$\sim$# nc -u 8.8.8.8 53
+Sending some packet to GOOGLE DNS!
+^C
+\end{lstlisting}
+
+\subsection*{Tcpdump} 
+\addcontentsline{toc}{subsection}{Tcpdump}
+
+Tcpdump является самой мощной утилитой для анализа работы сетевого стека. Эта утилита выводит
+описание содержимого пакетов сетевого интерфейса.
+
+\vspace{0.3cm}
+\begin{lstlisting}
+root@server:~# tcpdump
+tcpdump: verbose output suppressed, use -v or -vv for full protocol decode
+listening on eth0, link-type EN10MB (Ethernet), capture size 262144 bytes
+13:43:42.366813   IP   server.ssh   >   192.168.1.73.60111:   Flags
+                  seq
+3538046563:3538046671,  ack 2391002831,  win 501,  options [nop,nop,TS val
+1982379078 ecr 802292551], length 108
+13:43:42.366891 IP server.ssh > 192.168.1.73.60111: Flags [P.], seq 
+108:244, ack 1, win 501, options [nop,nop,TS val 1982379078 ecr 
+802292551], length 136
+13:43:42.367002 IP 192.168.1.73.60111 > server.ssh: Flags [.], ack 108, 
+win 2046, options [nop,nop,TS val 802292585 ecr 1982379078], length 0
+13:43:42.367002 IP 192.168.1.73.60111 > server.ssh: Flags [.], ack 244, 
+win 2044, options [nop,nop,TS val 802292585 ecr 1982379078], length 0
+13:43:42.367059 IP server.ssh > 192.168.1.73.60111: Flags [P.], seq 
+244:272, ack 1, win 501, options [nop,nop,TS val 1982379079 ecr 
+802292585], length 28
+\end{lstlisting}
+\vspace{0.2cm}
+
+Описанию параметров пакета предшествует отметка времени, которая по умолчанию печатается в
+виде часов, минут, секунд и долей секунды после полуночи.Работой tcpdump можно управлять с
+помощью набора ключей и параметров.\\
+
+В случае наличия нескольких интерфейсов с помощью ключа -i можно выбрать один, а с параметром
+\colorbox{backcolour}{host} определить адрес, трафик до которого необходимо отобразить на экране.
+
+\vspace{0.3cm}
+\begin{lstlisting}
+root@server:$\sim$# tcpdump -i eth0 host 8.8.8.8
+tcpdump: verbose output suppressed, use -v or -vv for full protocol decode
+listening on eth0, link-type EN10MB (Ethernet), capture size 262144 bytes
+13:47:44.555289 IP server > dns.google: ICMP echo request, id 4, seq 356, 
+length 64
+\end{lstlisting}
+
+\newpage
+
+\begin{lstlisting}
+13:47:44.578818 IP dns.google > server: ICMP echo reply, id 4, seq 356, 
+length 64
+13:47:45.558374 IP server > dns.google: ICMP echo request, id 4, seq 357, 
+length 64
+13:47:45.583456 IP dns.google > server: ICMP echo reply, id 4, seq 357, 
+length 64
+13:47:46.559604 IP server > dns.google: ICMP echo request, id 4, seq 358, 
+length 64
+13:47:46.581900 IP dns.google > server: ICMP echo reply, id 4, seq 358, 
+length 64
+13:47:47.561489 IP server > dns.google: ICMP echo request, id 4, seq 359, 
+length 64
+13:47:47.584801 IP dns.google > server: ICMP echo reply, id 4, seq 359, 
+length 64
+
+Src dst
+\end{lstlisting}
+\vspace{0.2cm}
+
+Фильтрации по адресу источника и назначения производится с помощью параметров \colorbox{backcolour}{Src} и \colorbox{backcolour}{dst}
+соответственно. В пример ниже видны только ответы от \textbf{8.8.8.8} , но не видно запросов.
+
+\vspace{0.3cm}
+\begin{lstlisting}
+root@server:~# tcpdump -i eth0 src 8.8.8.8
+tcpdump: verbose output suppressed, use -v or -vv for full protocol decode
+listening on eth0, link-type EN10MB (Ethernet), capture size 262144 bytes
+13:51:58.094222  IP dns.google > server: ICMP echo reply, id 4, seq 609,
+64
+13:51:59.099626  IP dns.googl  > server  ICMP echo reply, id 4, seq 610,
+64
+13:52:00.100698  IP dns.googl  > server  ICMP echo reply, id 4, seq 611,
+64
+$$
+\end{lstlisting}
+\vspace{0.2cm}
+
+Описанные действия крайне удобны для сбора трафика, но в tcpdump существует возможность
+комбинировать варианты, чтобы выделить именно те пакеты, которые требуются. Есть три способа
+создания комбинаций, схожих с базовым программированием:
+\begin{itemize}
+    \item[-] И - \textbf{and} или \textbf{\&\&}
+    \item[-] ИЛИ - \textbf{or} или \textbf{||}
+    \item[-] Исключить - \textbf{not} или \textbf{!}
+\end{itemize}
+
+С помощью \colorbox{backcolour}{and} объединили условия адреса и порта.
+
+\vspace{0.3cm}
+\begin{lstlisting}
+root@server:~# tcpdump -i eth0 host 8.8.8.8 and port 53
+tcpdump: verbose output suppressed, use -v or -vv for full protocol decode
+listening on eth0, link-type EN10MB (Ethernet), capture size 262144 bytes
+13:54:09.475970 IP server.38878 > dns.google.domain: Flags [S], seq 
+1882266456, win 64240, options [mss 1460,sackOK,TS val 2494499897 ecr 0,
+nop,wscale 7], length 0
+13:54:09.500842 IP dns.google.domain > server.38878: Flags [S.], seq 
+1845975136, ack 1882266457, win 65535, options [mss 1430,sackOK,TS val 
+341650861 ecr 2494499897,nop,wscale 8], length 0
+13:54:09.500895 IP server.38878 > dns.google.domain: Flags [.], ack 1, win 
+502, options [nop,nop,TS val 2494499921 ecr 341650861], length 0
+13:54:11.523621 IP dns.google.domain > server.38878: Flags [F.], seq 1, 
+ack 1, win 256, options [nop,nop,TS val 341652884 ecr 2494499921], length 
+0
+13:54:11.523843 IP server.38878 > dns.google.domain: Flags [F.], seq 1, 
+ack 2, win 502, options [nop,nop,TS val 2494501944 ecr 341652884], length 
+0
+13:54:11.547083 IP dns.google.domain > server.38878: Flags [.], ack 2, win 
+256, options [nop,nop,TS val 341652908 ecr 2494501944], length 0
+^C
+6 packets captured
+6 packets received by filter
+0 packets dropped by kernel
+$$
+\end{lstlisting}
+\vspace{0.2cm}
+
+С помощью исключения порта 22 собирается весь трафик, но без сессий SSH, которые часто только
+мешают в анализе пакетов.
+
+\vspace{0.3cm}
+\begin{lstlisting}
+root@server:~# tcpdump -i eth0 port ! 22
+tcpdump: verbose output suppressed, use -v or -vv for full protocol decode
+listening on eth0, link-type EN10MB (Ethernet), capture size 262144 bytes
+14:12:11.118891 IP 192.168.1.75.50222 > 224.0.0.252.hostmon: UDP, length
+22
+14:12:11.119213   IP   server.42847   >   mygpon.domain:   25616+
+                        [1au] PTR? 255.1.168.192.in-addr.arpa. (55)
+14:12:11.126544 IP mygpon.domain > server.42847: 25616 NXDomain 0/1/1(104)
+14:12:11.127434    IP     server.42847    >     mygpon.domain:    25616+
+PTR? 255.1.168.192.in-addr.arpa. (44)
+14:12:11.130657 IP mygpon.domain > server.42847: 25616 NXDomain 0/0/0 (44)
+14:12:11.131321   IP   server.41849   >   mygpon.domain:   13992+   [1au]
+                  PTR? 75.1.168.192.in-addr.arpa. (54)
+14:12:11.138647 IP mygpon.domain > server.41849: 13992 NXDomain 0/1/1(103)
+14:12:11.139065    IP     server.41849    >     mygpon.domain:    13992+
+                   PTR? 75.1.168.192.in-addr.arpa. (43)
+^C
+6 packets captured
+6 packets received by filter
+0 packets dropped by kernel
+$$
+\end{lstlisting}
+\vspace{0.2cm}
+
+\textbf{Важно!} \underbar{\textit{С помощью опции -w <имя файла> трафик будет записан в}}\\
+\underbar{\textit{указанный файл, а ключ -s0 уберет ограничение на размер записываемых}} 
+\underbar{\textit{пакетов.}}
+
+\newpage
+
+\section*{Практическое задание} 
+\addcontentsline{toc}{section}{Практическое задание}
+
+\begin{enumerate}
+    \item С помощью утилиты netplan повторить имеющиеся в системе параметры, но задать их
+    статически.
+    \item Запустить ping до сайта ya.ru, проверить доступность.
+    \item Не останавливая ping, открыть отдельное окно терминала и вывести на экран только запросы
+    в сторону (echo request) в сторону сайта ya.ru.
+    \item С помощью утилиты nc проверить доступность основных портов (53,80, 443) у сайта
+    ya.ru, habr.com, google.com .
+    \item Проанализировать предложенный .pcap файл дампа сетевого трафика.
+    \item Установить утилиту ssh, подключиться с хостовой машины к виртуальной машине по ssh
+    (прим. необходимо сменить конфигурацию сетевого адаптера гостевой ОС). Отключить
+    возможность аутентифицироваться пользователю root. Сделать аутентификацию с
+    использованием публичного ключа.
+\end{enumerate}
+
+\newpage
+
+\section*{Глоссарий} 
+\addcontentsline{toc}{section}{Глоссарий}
+
+\href{https://ru.wikipedia.org/wiki/IP-адрес}{\underbar{\textbf{IP-адрес}}} — уникальный сетевой адрес узла в компьютерной сети, построенной на основе стека
+протоколов TCP/IP.\\
+
+\noindent \href{https://ru.wikipedia.org/wiki/Порт_(компьютерные_сети)}{\underbar{\textbf{Порт}}} - сетевой идентификатор приложения.\\
+
+\noindent \href{https://ru.wikipedia.org/wiki/MAC-адрес}{\underbar{\textbf{MAC адрес}}} - адрес сетевой карты.\\
+
+\noindent \href{https://netplan.io/}{\underbar{\textbf{Netplan}}} - утилита для настройки сети в Linux.
+
+\section*{Дополнительные материалы} 
+\addcontentsline{toc}{section}{Дополнительные материалы}
+
+\href{https://habr.com/ru/post/448400/}{\textit{Статья о netplan}}
+
+\section*{Используемые источники} 
+\addcontentsline{toc}{section}{Используемые источники}
+
+\href{https://ru.wikipedia.org/wiki/Динамический_порт}{\textit{https://ru.wikipedia.org/wiki/Динамический\_порт}}\\
+\href{https://netplan.io/examples/}{\textit{https://netplan.io/examples/}}
+
+\end{document}
