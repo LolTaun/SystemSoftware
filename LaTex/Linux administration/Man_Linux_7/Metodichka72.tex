@@ -530,7 +530,7 @@ rtt min/avg/max/mdev = 23.025/23.528/23.780/0.272 ms
 \newpage
 
 \begin{lstlisting}
-root@server:~# netstat -tulpan
+root@server:$\sim$# netstat -tulpan
 Active Internet connections (servers and
 Proto Recv-Q Send-Q Local Address           Foreign               Stat
 PID/Program name
@@ -555,7 +555,7 @@ $$
 
 \vspace{0.3cm}
 \begin{lstlisting}
-root@server:~# ss -lt
+root@server:$\sim$# ss -lt
 State               Recv-Q               Send-Q                     Local
 Address:Port                            Peer                    Process
 LISTEN                            0                                  4096
@@ -610,7 +610,7 @@ Tcpdump является самой мощной утилитой для ана�
 
 \vspace{0.3cm}
 \begin{lstlisting}
-root@server:~# tcpdump
+root@server:$\sim$# tcpdump
 tcpdump: verbose output suppressed, use -v or -vv for full protocol decode
 listening on eth0, link-type EN10MB (Ethernet), capture size 262144 bytes
 13:43:42.366813   IP   server.ssh   >   192.168.1.73.60111:   Flags
@@ -673,7 +673,7 @@ Src dst
 
 \vspace{0.3cm}
 \begin{lstlisting}
-root@server:~# tcpdump -i eth0 src 8.8.8.8
+root@server:$\sim$# tcpdump -i eth0 src 8.8.8.8
 tcpdump: verbose output suppressed, use -v or -vv for full protocol decode
 listening on eth0, link-type EN10MB (Ethernet), capture size 262144 bytes
 13:51:58.094222  IP dns.google > server: ICMP echo reply, id 4, seq 609,
@@ -699,7 +699,7 @@ $$
 
 \vspace{0.3cm}
 \begin{lstlisting}
-root@server:~# tcpdump -i eth0 host 8.8.8.8 and port 53
+root@server:$\sim$# tcpdump -i eth0 host 8.8.8.8 and port 53
 tcpdump: verbose output suppressed, use -v or -vv for full protocol decode
 listening on eth0, link-type EN10MB (Ethernet), capture size 262144 bytes
 13:54:09.475970 IP server.38878 > dns.google.domain: Flags [S], seq 
@@ -731,7 +731,7 @@ $$
 
 \vspace{0.3cm}
 \begin{lstlisting}
-root@server:~# tcpdump -i eth0 port ! 22
+root@server:$\sim$# tcpdump -i eth0 port ! 22
 tcpdump: verbose output suppressed, use -v or -vv for full protocol decode
 listening on eth0, link-type EN10MB (Ethernet), capture size 262144 bytes
 14:12:11.118891 IP 192.168.1.75.50222 > 224.0.0.252.hostmon: UDP, length
