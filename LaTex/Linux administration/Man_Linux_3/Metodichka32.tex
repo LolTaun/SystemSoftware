@@ -39,7 +39,8 @@
     showspaces=false,                
     showstringspaces=false,
     showtabs=false,                  
-    tabsize=2
+    tabsize=2,
+    mathescape=true
 }
 
 \lstset{style=mystyle}
@@ -237,11 +238,11 @@ $\mathtt{\wedge}$ означает клавишу Ctrl. Сохранение ф�
 \end{enumerate}
 
 \begin{lstlisting}
-user@server:~$ cat some_text.txt
+user@server:$\sim$$\textdollar$ cat some_text.txt
             
 hello World!
             
-user@server:~$ tr [:lower:] [:upper:] < some_text.txt
+user@server:$\sim$$\textdollar$ tr [:lower:] [:upper:] < some_text.txt
             
 HELLO WORLD!
 \end{lstlisting}
@@ -257,19 +258,19 @@ HELLO WORLD!
 \end{enumerate}
 
 \begin{lstlisting}
-user@server:~$ echo "hello world!"
+user@server:$\sim$$\textdollar$ echo "hello world!"
 
 hello world!
 
-user@server:~$ echo "hello World!" > text_file.txt
+user@server:$\sim$$\textdollar$ echo "hello World!" > text_file.txt
 
-user@server:~$ cat text_file.txt
+user@server:$\sim$$\textdollar$ cat text_file.txt
 
 hello world!
 
-user@server:~$ echo "Another line!" >> text_file.txt
+user@server:$\sim$$\textdollar$ echo "Another line!" >> text_file.txt
 
-user@server:~$ cat text_file.txt
+user@server:$\sim$$\textdollar$ cat text_file.txt
 
 hello world!
 
@@ -286,13 +287,13 @@ Another line!
 \end{enumerate}
 
 \begin{lstlisting}
-user@server:~$ some_text.txt
+user@server:$\sim$$\textdollar$ some_text.txt
 
 some_text.txt: command not found
 
-user@server:~$ some_text.txt 2> err_text.txt
+user@server:$\sim$$\textdollar$ some_text.txt 2> err_text.txt
 
-user@server:~$ cat err_text.txt
+user@server:$\sim$$\textdollar$ cat err_text.txt
 
 some_text.txt: command not found
 \end{lstlisting}
@@ -313,7 +314,7 @@ some_text.txt: command not found
 \vspace{0.5cm}
 
 \begin{lstlisting}
-user@server:~$ ls -l | wc -l
+user@server:$\sim$$\textdollar$ ls -l | wc -l
 
 30
 \end{lstlisting}
@@ -403,7 +404,7 @@ SED и AWK.
 \end{itemize}
 
 \begin{lstlisting}
-user@server:~$ grep -ir error
+user@server:$\sim$$\textdollar$ grep -ir error
 /var/log/*
                                                                   16:28:1
 URL:http://ftpmaster.internal/ubuntu/pool/main/libg/libgpg-error/libgpg-e
@@ -430,7 +431,7 @@ deb ...
 \end{itemize}
 
 \begin{lstlisting}
-user@server:~$ grep -P 'Jan\s\d{2}\s20' /var/log/syslog
+user@server:$\sim$$\textdollar$ grep -P 'Jan\s\d{2}\s20' /var/log/syslog
 
 Jan 10 20:14:59 server snapd[614]: storehelpers.go:551: cannot refresh: 
 snap has no updates available: "core18", "lxd"
@@ -454,7 +455,7 @@ Jan 10 20:15:09 server systemd[1]: Reloading.
 \end{itemize}
 
 \begin{lstlisting}
-user@server:~$ cat /var/log/syslog |grep -v named
+user@server:$\sim$$\textdollar$ cat /var/log/syslog |grep -v named
 
 Jan 10 14:17:33 server systemd[1]: logrotate.service: Succeeded.
 
@@ -487,7 +488,7 @@ Jan 10 14:17:33 server systemd[1]: Finished Daily man-db regeneration.
 \vspace{0.3cm}
 
 \begin{lstlisting}
-user@server:~$ cat file
+user@server:$\sim$$\textdollar$ cat file
 
 test
 
@@ -499,7 +500,7 @@ test
 
 test hello
 
-user@server:~$ sed 's/test/text/g' file
+user@server:$\sim$$\textdollar$ sed 's/test/text/g' file
 
 text
 
@@ -541,7 +542,7 @@ AWK можно использовать как самостоятельный я
 \vspace{0.3cm}
 
 \begin{lstlisting}
-@server:~$ ls -la | awk '{print $1 }'
+@server:$\sim$$\textdollar$ ls -la | awk '{print $\textdollar$1 }'
 
 total
 
@@ -575,7 +576,7 @@ xr-x
 \vspace{0.3cm}
 
 \begin{lstlisting}
-root@server:~# cut -f 3 -d : /etc/passwd
+root@server:$\sim$# cut -f 3 -d : /etc/passwd
 
 0
 
@@ -599,7 +600,7 @@ root@server:~# cut -f 3 -d : /etc/passwd
 \vspace{0.3cm}
 
 \begin{lstlisting}
-root@server:~# cut -f 3 -d : /etc/passwd | sort
+root@server:$\sim$# cut -f 3 -d : /etc/passwd | sort
 
 0
 
@@ -617,7 +618,7 @@ root@server:~# cut -f 3 -d : /etc/passwd | sort
 
 ...
 
-root@server:~# cut -f 3 -d : /etc/passwd | sort -n
+root@server:$\sim$# cut -f 3 -d : /etc/passwd | sort -n
 
 0
 
@@ -637,7 +638,7 @@ root@server:~# cut -f 3 -d : /etc/passwd | sort -n
 
 \vspace{0.3cm}
 \begin{lstlisting}
-root@server:~# cut -f 1 -d : /etc/passwd | tr [:lower:] [:upper:]
+root@server:$\sim$# cut -f 1 -d : /etc/passwd | tr [:lower:] [:upper:]
 
 ROOT
 
@@ -679,20 +680,20 @@ MAN
 \section*{Глоссарий} 
 \addcontentsline{toc}{section}{Глоссарий}
 
-\textbf{Консольные текстовые редакторы} — редакторы текста для командной строки в ОС Linux.
+\underbar{\textbf{Консольные текстовые редакторы}} — редакторы текста для командной строки в ОС Linux.
 \href{https://losst.ru/luchshie-tekstovye-redaktory-linux}{Небольшой обзор редакторов.}\\
 
-\href{https://ru.wikipedia.org/wiki/Стандартные_потоки}{\underline{\textbf{Стандартные потоки}}} — специальный тип потоков, имеющих свой номер (дескриптор) и
+\noindent \href{https://ru.wikipedia.org/wiki/Стандартные_потоки}{\underbar{\textbf{Стандартные потоки}}} — специальный тип потоков, имеющих свой номер (дескриптор) и
 предназначенных для выполнения стандартных функций: ожидание команд пользователя, вывод
 данных на экран, вывод сообщений об ошибках на экран.\\
 
-\href{https://ru.wikipedia.org/wiki/Конвейер_(Unix)}{\underline{\textbf{Конвейер (pipeline)}}} — набор процессов, для которых реализована следующая схема: вывод
+\noindent \href{https://ru.wikipedia.org/wiki/Конвейер_(Unix)}{\underbar{\textbf{Конвейер (pipeline)}}} — набор процессов, для которых реализована следующая схема: вывод
 результата работы одного процесса передаётся на ввод другому процессу.\\
 
-\href{https://ru.wikipedia.org/wiki/Аутентификация}{\underline{\textbf{Аутентификация}}} — процедура проверки подлинности, например сравнением введённого пароля
+\noindent \href{https://ru.wikipedia.org/wiki/Аутентификация}{\underbar{\textbf{Аутентификация}}} — процедура проверки подлинности, например сравнением введённого пароля
 пользователя с паролем, сохранённым в базе данных паролей.\\
 
-\href{https://losst.pro/regulyarnye-vyrazheniya-linux}{\underline{\textbf{Регулярные выражения}}} — инструмент для поиска текста по шаблону, обработки и изменения строк,
+\noindent \href{https://losst.pro/regulyarnye-vyrazheniya-linux}{\underbar{\textbf{Регулярные выражения}}} — инструмент для поиска текста по шаблону, обработки и изменения строк,
 который можно применять для следующих задач: поиск и замена текста в файле, проверка строки на
 соответствие шаблону и т. д.
 
@@ -700,23 +701,23 @@ MAN
 \addcontentsline{toc}{section}{Дополнительные материалы}
 
 \begin{enumerate}
-    \item \href{https://habr.com/ru/post/115825/}{Регулярные выражения}
-    \item \href{http://rus-linux.net/MyLDP/consol/sed.html}{SED}
-    \item \href{http://rus-linux.net/MyLDP/consol/awk.html}{AWK}
-    \item \href{http://xgu.ru/wiki/Стандартные_потоки_ввода/вывода}{Потоки ввода/вывода}
-    \item \href{https://losst.pro/avtorizatsiya-po-klyuchu-ssh}{Авторизация по ключу}
-    \item \href{https://rtfm.co.ua/putty-nastrojka-avtorizacii-ssh-po-klyuchu/}{Настройка авторизации по ключу, используя программу PuTTY}
-    \item \href{https://losst.pro/luchshie-tekstovye-redaktory-linux}{Небольшой обзор редакторов}
+    \item \href{https://habr.com/ru/post/115825/}{\textit{Регулярные выражения}}
+    \item \href{http://rus-linux.net/MyLDP/consol/sed.html}{\textit{SED}}
+    \item \href{http://rus-linux.net/MyLDP/consol/awk.html}{\textit{AWK}}
+    \item \href{http://xgu.ru/wiki/Стандартные_потоки_ввода/вывода}{\textit{Потоки ввода/вывода}}
+    \item \href{https://losst.pro/avtorizatsiya-po-klyuchu-ssh}{\textit{Авторизация по ключу}}
+    \item \href{https://rtfm.co.ua/putty-nastrojka-avtorizacii-ssh-po-klyuchu/}{\textit{Настройка авторизации по ключу, используя программу PuTTY}}
+    \item \href{https://losst.pro/luchshie-tekstovye-redaktory-linux}{\textit{Небольшой обзор редакторов}}
 \end{enumerate}
 
 \section*{Используемые источники} 
 \addcontentsline{toc}{section}{Используемые источники}
 
-\href{https://losst.pro/regulyarnye-vyrazheniya-linux}{Регулярные выражения в Linux}\\
+\href{https://losst.pro/regulyarnye-vyrazheniya-linux}{\textit{Регулярные выражения в Linux}}\\
 
-\noindent \href{https://www.linuxcenter.ru/lib/books/kostromin}{Костромин В. Linux для пользователя}\\
+\noindent \href{https://www.linuxcenter.ru/lib/books/kostromin}{\textit{Костромин В. Linux для пользователя}}\\
 
-\noindent \href{https://help.ubuntu.ru/wiki/vim}{Статья, посвящённая текстовым редакторам vi/Vim}\\
+\noindent \href{https://help.ubuntu.ru/wiki/vim}{\textit{Статья, посвящённая текстовым редакторам vi/Vim}}\\
 
 
 \end{document}
