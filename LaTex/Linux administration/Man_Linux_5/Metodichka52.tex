@@ -41,7 +41,8 @@
     showspaces=false,                
     showstringspaces=false,
     showtabs=false,                  
-    tabsize=2
+    tabsize=2,
+    mathescape=true
 }
 
 \lstset{style=mystyle}
@@ -303,7 +304,7 @@ Extensible Firmware Interface). BIOS основан на оригинально�
 
 \vspace{0.3cm}
 
-\begin{lstlisting}[mathescape=true]
+\begin{lstlisting}
 root@server:$\sim$# parted /dev/sdb
 
 GNU Parted 3.3
@@ -404,7 +405,7 @@ Number Start   End    Size  File system Name      Flag
 чтобы убедиться, что устройство было создано. 
 \newpage 
 
-\begin{lstlisting}[mathescape=true]
+\begin{lstlisting}
 (parted)quit
 
 root@server:$\sim$# udevadm settle
@@ -467,7 +468,7 @@ sdb                          8:16    0     1G  0  disk
 
 \vspace{0.3cm}
 
-\begin{lstlisting}[mathescape=true]
+\begin{lstlisting}
 root@server:$\sim$# mkfs.xfs /dev/sdb1
 
 meta-data=/dev/sdb1                           agcount=4, agsize=6103 blks
@@ -511,7 +512,7 @@ $$
 
 \vspace{0.3cm}
 
-\begin{lstlisting}[mathescape=true]
+\begin{lstlisting}
 root@server:$\sim$# mkdir /opt/database
 
 root@server:$\sim$# du -sh /opt/database/
@@ -537,7 +538,7 @@ $$
 монтирования.
 
 \vspace{0.3cm}
-\begin{lstlisting}[mathescape=true]
+\begin{lstlisting}
 root@server:$\sim$# mount /dev/sdb1 /opt/database/
 
 root@server:$\sim$# cat /var/log/syslog > /opt/database/some_data
@@ -568,7 +569,7 @@ $$
 При помощи команды \colorbox{backcolour}{mount} без каких-либо ключей можно увидеть примонтированные файловые
 системы.
 
-\begin{lstlisting}[mathescape=true]
+\begin{lstlisting}
 root@server:$\sim$# mount
 
 sysfs on /sys type sysfs (rw,nosuid,nodev,noexec,relatime)
@@ -760,7 +761,7 @@ Number Start    End   Size    File system Name       Flags
 Создадим из раздела Physical Volume или физический том.
 \vspace{0.3cm}
 
-\begin{lstlisting}[mathescape=true]
+\begin{lstlisting}
 root@server:$\sim$# pvcreate /dev/sdb2
 
   Physical volume "/dev/sdb2" successfully created.
@@ -782,7 +783,7 @@ $$
 
 \vspace{0.3cm}
 
-\begin{lstlisting}[mathescape=true]
+\begin{lstlisting}
 root@server:$\sim$# vgcreate example_vg
   
   /dev/sdb2 Volume group "example_vg"
@@ -801,7 +802,7 @@ root@server:$\sim$# vgcreate example_vg
 Теперь можем выделить часть группы под логический том.
 \vspace{0.3cm}
 
-\begin{lstlisting}[mathescape=true]
+\begin{lstlisting}
 root@server:$\sim$# lvcreate -n example_lv -L 20M
 
 root@server:$\sim$# lvcreate -n example_lv -L 20M
@@ -827,7 +828,7 @@ $$
 Создаем и монтируем файловую систему по аналогии с обычным разделом.
 \vspace{0.3cm}
 
-\begin{lstlisting}[mathescape=true]
+\begin{lstlisting}
 root@server:$\sim$# mkfs.xfs /dev/example_vg/example_lv
 
 meta-data=/dev/example_vg/example_lv                isize=512 agcount=1,
@@ -867,7 +868,7 @@ $$
 Volume Group.
 \vspace{0.3cm}
 
-\begin{lstlisting}[mathescape=true]
+\begin{lstlisting}
 root@server:$\sim$# vgs
 
   VG      #PV #LV #SN Attr   VSize  VFree
@@ -889,7 +890,7 @@ Cpy%Sync
 
 \newpage
 
-\begin{lstlisting}[mathescape=true]
+\begin{lstlisting}
 
 root@server:$\sim$# lvextend -r -L +72M /dev/
 
@@ -968,7 +969,7 @@ $$
 отражена в блоках.
 \vspace{0.3cm}
 
-\begin{lstlisting}[mathescape=true]
+\begin{lstlisting}
 root@server:$\sim$# df -h
 
 Filesystem                          Size  Used Avail Use% Mounted on
@@ -1009,7 +1010,7 @@ $$
 Утилита du требует указания пути до каталога.
 \vspace{0.3cm}
 
-\begin{lstlisting}[mathescape=true]
+\begin{lstlisting}
 root@server:$\sim$# du -h
 
 /opt/database/ 16K
@@ -1038,13 +1039,13 @@ Inode уникальны на уровне разделов. Вы можете �
 \begin{lstlisting}
 # ls -li
 
-434234 drw-r--r-- 2 root            examples 4096 Dec 1 14:27 dir
+$\mathbf{434234}$ drw-r--r-- 2 root            examples 4096 Dec 1 14:27 dir
 
-434231 drw-rwSr-t 2 root            developers 4096 Dec 1 14:52 dir1
+$\mathbf{434231}$ drw-rwSr-t 2 root            developers 4096 Dec 1 14:52 dir1
 
-434232 drw-rw-rwT 2 root            root       4096 Dec 1 14:53 dir2
+$\mathbf{434232}$ drw-rw-rwT 2 root            root       4096 Dec 1 14:53 dir2
 
-422147 -rwsr-xr-x 1 root root           0 Dec 1 14:04 myfile
+$\mathbf{422147}$ -rwsr-xr-x 1 root root           0 Dec 1 14:04 myfile
 
 \end{lstlisting}
 
