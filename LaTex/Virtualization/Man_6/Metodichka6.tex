@@ -133,11 +133,11 @@
 гипервизора, получается матрёшка в матрёшке. Поэтому гипервизор, работающий максимально
 близко к аппаратуре, мы будем называть гипервизором первого уровня, или хозяйским гипервизором.
 Гипервизор, работающий поверх гипервизора первого уровня, мы будем называть гипервизором
-второго уровня или гостевым гипервизором.\\
+второго уровня или гостевым гипервизором.
 
 \begin{figure}[h]
     \centering
-    \scalebox{1}{\includegraphics[width=1\textwidth]{2.png}}\\
+    \scalebox{1}{\includegraphics[width=1\textwidth]{2.png}}
     \label{framework} 
 \end{figure}
 
@@ -256,7 +256,7 @@ Oracle VirtualBox или VMware Workstation и в нём установить е
 То есть для эффективной виртуализации второго уровня необходимо сделать так, чтобы большая
 часть работы выполнялась непосредственно в гостевой системе. Возможности современной аппаратуры, 
 в первую очередь центральных процессоров, а также некоторых периферийных
-устройств позволяют осуществить это. Нужно лишь, чтобы гостевой гипервизор использовал такие же
+устрой- ств позволяют осуществить это. Нужно лишь, чтобы гостевой гипервизор использовал такие же
 средства аппаратного ускорения виртуализации, которые доступны хозяйскому гипервизору. И, как ни
 странно, компания AMD позаботилась об этом с самого начала: команды управления виртуализацией
 также могут быть виртуализованы, то есть могут корректно выполняться гостевой системой.\\
@@ -298,7 +298,7 @@ Intel и AMD, выглядит не так:
     \scalebox{0.75}{\includegraphics[width=1\textwidth]{4.png}}
     \label{framework} 
 \end{figure}
-
+\vspace{-0.7cm}
 \begin{figure}[h]
     А вот так:\\
 
@@ -398,37 +398,42 @@ Intel и AMD, выглядит не так:
     \begin{enumerate}
         \item[a.] Для процессоров AMD она по умолчанию включена уже почти десять лет. Можно разве
         что проверить, действительно ли включена поддержка:
-        \begin{lstlisting}
+        \vspace{0.3cm}
+\begin{lstlisting}
 # cat /sys/module/kvm_amd/parameters/nested
 Y
-        \end{lstlisting}
+\end{lstlisting}
         \item[b.] Для процессоров ядра Linux версии ниже 4.20 необходимо явно включить поддержку
         вложенной виртуализации при загрузке соответствующего модуля, предварительно его
         выгрузив:
-        \begin{lstlisting}
+        \vspace{0.3cm}
+\begin{lstlisting}
 # modprobe -r kvm_intel
 # modprobe kvm_intel nested=1
 # cat /sys/module/kvm_intel/parameters/nested
 Y
-        \end{lstlisting}   
+\end{lstlisting}   
     \end{enumerate}
 
     \item Дать указание хозяйскому гипервизору предоставлять виртуализированные ресурсы
     управления виртуализацией своим гостям. Для этого нужно установить модель эмулируемого
-    процессора в значение \\
-    \colorbox{backcolour}{host-passthrough}.\\
+    процессора в значение
+    \colorbox{backcolour}{host-} \colorbox{backcolour}{passthrough}.\\
     Это проще всего сделать в графическом интерфейсе диспетчера виртуальных машин, в меню
     настройки процессора, поле Model:
-    \begin{figure}[h]
-        \begin{centering}
-        \scalebox{0.85}{\includegraphics[width=1\textwidth]{7.png}}\\  \mbox{}\\
-        \label{framework} 
-        \end{centering}
-        В результате после установки ОС в гостевой системе мы обнаруживаем, что и там есть аппаратная
-поддержка виртуализации, да ещё и вложенной:
-    \end{figure}
+\end{enumerate}
+\newpage
+\begin{figure}[h]
+    \begin{centering}
+    \scalebox{0.85}{\includegraphics[width=1\textwidth]{7.png}}  \mbox{}\\
+    \label{framework} 
+    \end{centering}
+\end{figure}
     
-    \begin{lstlisting}
+    В результате после установки ОС в гостевой системе мы обнаруживаем, что и там есть аппаратная
+поддержка виртуализации, да ещё и вложенной:
+\vspace{0.3cm}
+\begin{lstlisting}
 # sudo virt-host-validate
   QEMU: Checking for hardware virtualization                  : PASS
   QEMU: Checking if device /dev/kvm exists                    : PASS
@@ -439,8 +444,8 @@ Y
 
 # cat /sys/module/kvm_intel/parameters/nested
 Y
-    \end{lstlisting}
-\end{enumerate}
+\end{lstlisting}
+
 
 \subsubsection*{Особенности}
 \addcontentsline{toc}{subsubsection}{Особенности}
@@ -473,7 +478,7 @@ VMware ESXi и т. д.\\
 
 \begin{figure}[h]
     \centering
-    \scalebox{1}{\includegraphics[width=1\textwidth]{8.png}}\\  \mbox{}\\
+    \scalebox{1}{\includegraphics[width=1\textwidth]{8.png}}  
     \label{framework} 
 \end{figure}
 
@@ -490,10 +495,11 @@ VMware ESXi и т. д.\\
 В отличие от KVM, в случае с Hyper-V поддержку вложенной виртуализации необходимо в явном виде
 включать для каждой конкретной виртуальной машины. Причём делается это исключительно из
 консоли PowerShell от имени администратора следующей командой:
-
+\vspace{0.3cm}
 \begin{lstlisting}
 Set-VMProcessor -VMName <VMName> -ExposeVirtualizationExtensions $true
 \end{lstlisting}
+\vspace{0.2cm}
 
 Рекомендуем ознакомиться с \href{https://learn.microsoft.com/en-us/virtualization/hyper-v-on-windows/user-guide/nested-virtualization}{официальной статьей Microsoft о вложенной виртуализации}.
 
@@ -511,7 +517,7 @@ AMD более удачная аппаратная реализация расш
 ближайшее время реализует поддержку вложенной виртуализации и для процессоров производства
 AMD.\\
 
-\href{https://ru.wikipedia.org/wiki/Ryzen}{Ryzen} — торговая марка 64-битных x86-совместимых микропроцессоров, разрабатываемых и
+\href{https://ru.wikipedia.org/wiki/Ryzen}{\underbar{Ryzen}} — торговая марка 64-битных x86-совместимых микропроцессоров, разрабатываемых и
 продаваемых компанией AMD для настольных, мобильных и встроенных систем, основанных на
 микроархитектурах Zen, Zen+ и Zen 2.
 
@@ -528,7 +534,7 @@ AMD.\\
 более широко даже в «боевых» условиях. Ранее вложенная виртуализация находила применение
 только в лабораториях или любительских решениях. Как мы упоминали в начале урока, Google Cloud
 и Oracle Cloud используют вложенную виртуализацию в своих продуктах. Более того, в случае с Oracle
-вложенная виртуализация — это \href{https://blogs.oracle.com/}{ключевая особенность их инфраструктуры}.\\
+вложенная виртуализация — это \href{https://blogs.oracle.com/}{ключевая особенность их инфраструктуры}.
 
 \section*{Виртуализация устройств ввода-вывода}
 \addcontentsline{toc}{section}{Виртуализация устройств ввода-вывода}
@@ -588,7 +594,7 @@ AMD.\\
 используются специализированные аппаратные блоки компьютера: часы реального времени,
 программируемые таймеры и т. д.\\
 
-\href{https://ru.wikipedia.org/wiki/Часы_реального_времени}{\textbf{Часы реального времени}} (ЧРВ, RTC — англ. Real Time Clock) — электронная схема, предназначенная
+\href{https://ru.wikipedia.org/wiki/Часы_реального_времени}{\underbar{Часы реального времени}} (ЧРВ, RTC — англ. Real Time Clock) — электронная схема, предназначенная
 для учёта хронометрических данных (текущего времени, даты, дня недели и др.), представляет собой
 систему из автономного источника питания и учитывающего устройства.\\
 
@@ -615,7 +621,7 @@ kvmclock, для Microsoft Hyper-V — \href{https://github.com/MicrosoftDocs/Vi
 серверами, ведущими высокоточный отсчёт времени. Это также относится к персональным рабочим
 станциям и системам, использующим ОС Windows.\\
 
-\href{https://ru.wikipedia.org/wiki/NTP}{\textbf{NTP}} (англ. Network Time Protocol — «протокол сетевого времени») — сетевой протокол для
+\href{https://ru.wikipedia.org/wiki/NTP}{\underbar{NTP}} (англ. Network Time Protocol — «протокол сетевого времени») — сетевой протокол для
 синхронизации внутренних часов компьютера с использованием сетей с переменной латентностью.\\
 
 NTP непременно используется в системах серверной виртуализации для периодической коррекции
@@ -663,7 +669,7 @@ NTP непременно используется в системах серве
 \end{figure}
 
 Высокая эффективность VirtIO достигается во многом благодаря механизму обмена данными между
-хозяйской и гостевыми системами — Virtqueue. Две системы обмениваются данными через набор
+хозяйской и гостевыми системами — Virtque- ue. Две системы обмениваются данными через набор
 буферов в разделяемой или общей памяти. Имеется в виду область памяти, доступная одновременно
 обеим системам. То есть не нужно эмулировать десятки регистров управления и индивидуальных
 битов в них. Эта же особенность позволяет существенно упростить драйверы, используемые в
@@ -683,7 +689,7 @@ WHQL-подписи Microsoft, которая есть у драйверов, я
 стоит иметь в виду, так как драйверы без WHQL-подписи имеют некоторые особенности при установке
 и использовании.\\
 
-\href{https://ru.wikipedia.org/wiki/WHQL}{\textbf{WHQL}} (сокр. от англ. Windows Hardware Quality Lab) — обозначение специальной лаборатории
+\href{https://ru.wikipedia.org/wiki/WHQL}{\underbar{WHQL}} (сокр. от англ. Windows Hardware Quality Lab) — обозначение специальной лаборатории
 фирмы Microsoft, занимающейся проверкой совместимости оборудования с операционными
 системами Windows.\\
 
@@ -814,18 +820,19 @@ Intel (под названием Virtualization Technology for Directed I/O ил
     данных, ещё и в большом объёме, негативно сказывается на производительности системы,
     так как приводит к «вымыванию» кешей процессора, возникновению дополнительных отказов
     страниц и банальной загрузке шины данных.
-
-\noindent   \href{https://ru.wikipedia.org/wiki/Отказ_страницы}{\textbf{Отказ страницы}} (англ. Page fault) — разновидность аппаратного исключения, возникающего в
-\noindent компьютере с виртуальной памятью на основе подкачки страниц в момент обращения к странице 
+\end{enumerate}
+\noindent \href{https://ru.wikipedia.org/wiki/Отказ_страницы}{\underbar{Отказ страницы}} (англ. Page fault) — разновидность аппаратного исключения, возникающего в
+компьютере с виртуальной памятью на основе подкачки страниц в момент обращения к странице 
 памяти, которая не включена блоком управления памятью в виртуальное адресное пространство
 процесса.
-\item \textbf{Многократные переключения из контекста пользовательского процесса в контекст ядра
+\begin{enumerate}
+\item[2.] \textbf{Многократные переключения из контекста пользовательского процесса в контекст ядра
 и обратно}. Из-за использования разных адресных пространств, как и в случае
 дополнительного копирования данных, вымываются кеши данных и MMU (имеется в виду
 содержимое TLB).
 \end{enumerate}
 
-\href{https://ru.wikipedia.org/wiki/Буфер_ассоциативной_трансляции}{\textbf{Буфер ассоциативной трансляции}} (англ. Translation lookaside buffer, TLB) — это специализированный
+\noindent \href{https://ru.wikipedia.org/wiki/Буфер_ассоциативной_трансляции}{\underbar{Буфер ассоциативной трансляции}} (англ. Translation lookaside buffer, TLB) — это специализированный
 кеш центрального процессора, используемый для ускорения трансляции адреса виртуальной памяти
 в адрес физической памяти.\\
 
@@ -922,11 +929,11 @@ Intel (под названием Virtualization Technology for Directed I/O ил
 сети, задача маршрутизации пакетов возложена на специализированную аппаратуру:
 маршрутизаторы и коммутаторы.\\
 
-\href{https://ru.wikipedia.org/wiki/Маршрутизатор}{\textbf{Маршрутизатор}} (проф. жарг. рýтер или роутер, транслитерация от англ. router) —
+\href{https://ru.wikipedia.org/wiki/Маршрутизатор}{\underbar{\textbf{Маршрутизатор}}} (проф. жарг. рýтер или роутер, транслитерация от англ. router) —
 специализированный компьютер, который пересылает пакеты между различными сегментами сети на
 основе правил и таблиц маршрутизации.\\
 
-\href{https://ru.wikipedia.org/wiki/Сетевой_коммутатор}{\textbf{Сетевой коммутатор}} (жарг. свитч, свич, от англ. switch — «переключатель») — устройство,
+\href{https://ru.wikipedia.org/wiki/Сетевой_коммутатор}{\underbar{\textbf{Сетевой коммутатор}}} (жарг. свитч, свич, от англ. switch — «переключатель») — устройство,
 предназначенное для соединения нескольких узлов компьютерной сети в пределах одного или
 нескольких сегментов сети.\\
 
@@ -943,7 +950,7 @@ Intel (под названием Virtualization Technology for Directed I/O ил
 интерфейса и добавлении его в сетевой мост вместе с реальным сетевым адаптером хозяйской
 системы.\\
 
-\href{https://ru.wikipedia.org/wiki/Сетевой_мост}{\textbf{Сетевой мост}} (также «бридж» от англ. bridge) — сетевое устройство второго уровня модели OSI,
+\href{https://ru.wikipedia.org/wiki/Сетевой_мост}{\underbar{\textbf{Сетевой мост}}} (также «бридж» от англ. bridge) — сетевое устройство второго уровня модели OSI,
 предназначенное для объединения сегментов (подсети) компьютерной сети в единую сеть.\\
 
 Красота этого решения состоит в том, что современные ОС и гипервизоры имеют встроенную
@@ -960,13 +967,14 @@ Intel (под названием Virtualization Technology for Directed I/O ил
 \begin{enumerate}
     \item Все сетевые интерфейсы, входящие в данный мост, вынуждены обрабатывать пакеты с
     данными, которые им совершенно не нужны. Это создает излишнюю и бессмысленную
-    нагрузку на центральный процессор каждой системы.\\
+    нагрузку на центральный процессор каждой системы.
+\end{enumerate}
 
     Хуже того, поскольку канонический мост предназначен, чтобы связать, как обычный кабель, несколько
 сегментов сети, в общем случае не зная, какие системы находятся по разные стороны моста,
 ретрансляции подвергаются все до единого пакеты, путешествующие по любому из подключённых
 сегментов сети. Для этого сетевой адаптер хозяйской машины переводится в так называемый
-«неразборчивый» режим (англ. promiscuous mode). В нормальном же режиме работы сетевой
+\textbf{«неразборчивый» режим} (англ. promiscuous mode). В нормальном же режиме работы сетевой
 адаптер автоматически отбрасывает все пакеты, кроме тех, что адресованы конкретно ему. Выбор
 происходит по MAC-адресу узла назначения. Таким образом, в нормальном режиме работы
 центральный процессор хозяйской системы затрачивает свои вычислительные ресурсы только на
@@ -974,10 +982,11 @@ Intel (под названием Virtualization Technology for Directed I/O ил
 системы вынужден заниматься обработкой каждого пакета, путешествующего по сети. Можно себе
 только представить, какие накладные расходы возникают при использовании сервера в
 высоконагруженной 10-гигабитной сети!
-\item Сетевые интерфейсы пропускают через себя и свои данные, и данные, адресованные другим
+\begin{enumerate}
+\item[2.] Сетевые интерфейсы пропускают через себя и свои данные, и данные, адресованные другим
 системам. В таком случае значительно осложняется задача корректного подсчета объёма
 переданных и принятых данных.
-\item Поскольку все интерфейсы получают данные, адресованные всем, могут возникать
+\item[3.] Поскольку все интерфейсы получают данные, адресованные всем, могут возникать
 неприятные ситуации с получением доступа к данным, которые не хотелось бы делать
 доступными случайным получателям. Не стоит рассчитывать на полноценную изоляцию
 передаваемых по сети данных. Если требуется надёжный обмен конфиденциальными
@@ -1001,6 +1010,8 @@ Intel (под названием Virtualization Technology for Directed I/O ил
 системами управления гипервизорами. Ниже мы рассмотрим несколько популярных продуктов,
 решающих эти задачи.
 
+\newpage
+
 \subsection*{VMware ESXi vSwitch} 
 \addcontentsline{toc}{subsection}{VMware ESXi vSwitch}
 
@@ -1020,7 +1031,7 @@ Intel (под названием Virtualization Technology for Directed I/O ил
 
 \begin{figure}[h]
     \centering
-    \scalebox{0.8}{\includegraphics[width=1\textwidth]{16.png}}\\ 
+    \scalebox{0.9}{\includegraphics[width=1\textwidth]{16.png}}\\ 
     \small\textit{Сеть с использованием vSphere Standard Switch, \href{https://docs.vmware.com/en/VMware-vSphere/index.html}{документация на vSphere 5}}  
     \label{framework} 
 \end{figure}
@@ -1048,7 +1059,7 @@ Intel (под названием Virtualization Technology for Directed I/O ил
         \item Обеспечение работы виртуальных подсетей (VLAN, IEEE 802.1Q).
     \end{enumerate}
 
-\href{https://ru.wikipedia.org/wiki/Шейпинг_(информатика)}{\textbf{Шейпинг}} (англ. shaping traffic — придание трафику формы) — ограничение пропускной способности
+\href{https://ru.wikipedia.org/wiki/Шейпинг_(информатика)}{\underbar{Шейпинг}} (англ. shaping traffic — придание трафику формы) — ограничение пропускной способности
 канала для отдельного узла сети ниже технических возможностей канала до узла. Шейпинг обычно
 используется как средство ограничения максимального потребления трафика со стороны узла сети.\\
 
@@ -1110,19 +1121,19 @@ Distributed Switch для VMware vSphere и Open vSwitch. Тем не менее
 
 \textbf{Другие важные особенности Open vSwitch:}
 \begin{itemize}
-    \item Поддержка таких стандартных протоколов, как NetFlow, sFlow, Switched Port Analyzer
+    \item Поддержка таких стандартных протоколов, как NetFlow, sFlow, Switch- ed Port Analyzer
     (SPAN)/Remote Switched Port Analyzer (RSPAN), LACP и 802.1ag.
     \item Поддержка VLAN (IEEE 802.1Q).
     \item Поддержка механизма QoS для различных приложений, пользователей или даже потоков
     обработки данных.
     \item Возможность агрегации портов с распределением нагрузки благодаря протоколу Link
     Aggregation Control Protocol (LACP, IEEE 802.1AX-2008).
-    \item Поддержка множества протоколов туннелирования, включая GRE, Virtual Extensible LAN
+    \item Поддержка множества протоколов туннелирования, включая GRE, Virt- ual Extensible LAN
     (VXLAN), Stateless Transport Tunneling (STT) и IPSec.
     \item Совместимость с программным мостом Linux Bridge (brctl).
 \end{itemize}
 
-\href{https://ru.wikipedia.org/wiki/QoS}{\textbf{QoS}} (англ. quality of service — «качество обслуживания») — технология предоставления различным
+\href{https://ru.wikipedia.org/wiki/QoS}{\underbar{QoS}} (англ. quality of service — «качество обслуживания») — технология предоставления различным
 классам трафика различных приоритетов в обслуживании. Также этим термином в области
 компьютерных сетей называют вероятность того, что сеть связи соответствует заданному соглашению
 о трафике. В ряде случаев — неформальное обозначение вероятности прохождения пакета между
@@ -1180,27 +1191,25 @@ Distributed Switch для VMware vSphere и Open vSwitch. Тем не менее
 
 Ниже наглядно проиллюстрированы все три режима:
 
-\newpage
-
 \begin{figure}[h]
     \centering
-    \scalebox{1}{\includegraphics[width=0.44\textwidth]{19.png}} \\
-    \label{framework} 
-\end{figure}
-
-\begin{figure}[h]
-    \centering
-    \scalebox{1}{\includegraphics[width=0.44\textwidth]{20.png}} \\
-    \label{framework} 
-\end{figure}
-
-\begin{figure}[h]
-    \centering
-    \scalebox{1}{\includegraphics[width=0.44\textwidth]{21.png}} 
+    \scalebox{1.12}{\includegraphics[width=0.44\textwidth]{19.png}} \\
     \label{framework} 
 \end{figure}
 
 \newpage
+
+\begin{figure}[h]
+    \centering
+    \scalebox{1.3}{\includegraphics[width=0.44\textwidth]{20.png}} \\
+    \label{framework} 
+\end{figure}
+
+\begin{figure}[h]
+    \centering
+    \scalebox{1.3}{\includegraphics[width=0.44\textwidth]{21.png}} 
+    \label{framework} 
+\end{figure}
 
 \subsection*{Заключение} 
 \addcontentsline{toc}{subsection}{Заключение}
@@ -1214,28 +1223,6 @@ Distributed Switch для VMware vSphere и Open vSwitch. Тем не менее
 гипервизорами, например VMware ESXi. Тем не менее можно найти решение для настройки и
 поддержания необходимой сетевой инфраструктуры любого современного гипервизора.\\
 
-\section*{Используемые источники} 
-\addcontentsline{toc}{section}{Используемые источники}
-
-\begin{enumerate}
-    \item \href{https://www.usenix.org/legacy/events/osdi10/tech/full_papers/Ben-Yehuda.pdf}{The Turtles Project: Design and Implementation of Nested Virtualization.}
-    \item \href{https://www.linux-kvm.org/images/3/33/02x03-NestedVirtualization.pdf}{Nested Virtualization: State of the art and future directions}.
-    \item \href{https://events19.linuxfoundation.org/wp-content/uploads/2017/12/Improving-KVM-x86-Nested-Virtualization-Liran-Alon-Oracle.pdf}{Improving KVM x86 nested virtualization}.
-    \item \href{https://www.redhat.com/en/blog/inception-how-usable-are-nested-kvm-guests}{Inception: How usable are nested KVM guests}.
-    \item \href{https://docs.microsoft.com/en-us/virtualization/hyper-v-on-windows/user-guide/nested-virtualization}{Run Hyper-V in a Virtual Machine with Nested Virtualization}.
-    \item \href{https://www.kernel.org/doc/Documentation/virtual/kvm/timekeeping.txt}{Timekeeping Virtualization for X86-Based Architectures}.
-    \item \href{https://www.kernel.org/doc/Documentation/virtual/kvm/timekeeping.txt}{Timekeeping in VMware Virtual Machines}.
-    \item \href{https://developer.ibm.com/tutorials/l-pci-passthrough/}{Linux virtualization and PCI passthrough}.
-    \item \href{https://it-events.com/system/attachments/files/000/001/102/original/LinuxPiter-DPDK-2015.pdf}{The Data Plane Development Kit (DPDK) – What it is and where it’s going}.
-    \item \href{https://blog.selectel.ru/vvedenie-v-dpdk-arxitektura-i-princip-raboty/}{Введение в DPDK: архитектура и принцип работы}.
-    \item \href{https://www.slideshare.net/jstleger/dpdk-summit-2015-intel-keith-wiles}{Future enhancements to DPDK framework}.
-    \item \href{https://ivirt-it.ru/open-vswitch-cicle/}{Open vSwitch. Цикл статей}.
-    \item \href{https://docs.vmware.com/en/VMware-vSphere/6.7/com.vmware.vsphere.networking.doc/GUID-35B40B0B-0C13-43B2-BC85-18C9C91BE2D4.html}{Документация на VMware vSphere Networking}.
-    \item \href{https://www.altaro.com/hyper-v/the-hyper-v-virtual-switch-explained-part-1/}{What is the Hyper-V Virtual Switch and How Does it Work}.
-    \item \href{http://www.itc22.com/fileadmin/ITC22_files/Edge_Talk-Pettit.pdf}{Virtual Switching in an Era of Advanced Edges}.
-    \item \href{https://www.net.in.tum.de/fileadmin/bibtex/publications/papers/Open-vSwitch-CloudNet-14.pdf}{Performance Characteristics of Virtual Switching}.
-\end{enumerate}
-
 \section*{Практическое задание} 
 \addcontentsline{toc}{section}{Практическое задание}
 
@@ -1243,9 +1230,30 @@ Distributed Switch для VMware vSphere и Open vSwitch. Тем не менее
     \item Настройте вложенную виртуализацию на свой выбор: на хозяйской системе с
     Linux-дистрибутивом KVM или на хозяйской системе с Windows 10 Hyper-V.
     \item Оцените производительность гостевого гипервизора. Для простоты можно понаблюдать за
-    отзывчивостью разных процессов, например, загрузкой и стартом различных приложений.
+    отзывчивостью разных процессов, например, загруз- кой и стартом различных приложений.
     Более точную оценку можно получить, воспользовавшись тестами из \href{https://www.phoronix-test-suite.com/}{Phoronix Test Suite}.
 \end{enumerate}
 
+\section*{Используемые источники} 
+\addcontentsline{toc}{section}{Используемые источники}
+
+\begin{enumerate}
+    \item \href{https://www.usenix.org/legacy/events/osdi10/tech/full_papers/Ben-Yehuda.pdf}{\textit{The Turtles Project: Design and Implementation of Nested Virtualization.}}
+    \item \href{https://www.linux-kvm.org/images/3/33/02x03-NestedVirtualization.pdf}{\textit{Nested Virtualization: State of the art and future directions}}.
+    \item \href{https://events19.linuxfoundation.org/wp-content/uploads/2017/12/Improving-KVM-x86-Nested-Virtualization-Liran-Alon-Oracle.pdf}{\textit{Improving KVM x86 nested virtualization}}.
+    \item \href{https://www.redhat.com/en/blog/inception-how-usable-are-nested-kvm-guests}{\textit{Inception: How usable are nested KVM guests}}.
+    \item \href{https://docs.microsoft.com/en-us/virtualization/hyper-v-on-windows/user-guide/nested-virtualization}{\textit{Run Hyper-V in a Virtual Machine with Nested Virtualization}}.
+    \item \href{https://www.kernel.org/doc/Documentation/virtual/kvm/timekeeping.txt}{\textit{Timekeeping Virtualization for X86-Based Architectures}}.
+    \item \href{https://www.kernel.org/doc/Documentation/virtual/kvm/timekeeping.txt}{\textit{Timekeeping in VMware Virtual Machines}}.
+    \item \href{https://developer.ibm.com/tutorials/l-pci-passthrough/}{\textit{Linux virtualization and PCI passthrough}}.
+    \item \href{https://it-events.com/system/attachments/files/000/001/102/original/LinuxPiter-DPDK-2015.pdf}{\textit{The Data Plane Development Kit (DPDK) – What it is and where it’s going}}.
+    \item \href{https://blog.selectel.ru/vvedenie-v-dpdk-arxitektura-i-princip-raboty/}{\textit{Введение в DPDK: архитектура и принцип работы}}.
+    \item \href{https://www.slideshare.net/jstleger/dpdk-summit-2015-intel-keith-wiles}{\textit{Future enhancements to DPDK framework}}.
+    \item \href{https://ivirt-it.ru/open-vswitch-cicle/}{\textit{Open vSwitch. Цикл статей}}.
+    \item \href{https://docs.vmware.com/en/VMware-vSphere/6.7/com.vmware.vsphere.networking.doc/GUID-35B40B0B-0C13-43B2-BC85-18C9C91BE2D4.html}{\textit{Документация на VMware vSphere Networking}}.
+    \item \href{https://www.altaro.com/hyper-v/the-hyper-v-virtual-switch-explained-part-1/}{\textit{What is the Hyper-V Virtual Switch and How Does it Work}}.
+    \item \href{http://www.itc22.com/fileadmin/ITC22_files/Edge_Talk-Pettit.pdf}{\textit{Virtual Switching in an Era of Advanced Edges}}.
+    \item \href{https://www.net.in.tum.de/fileadmin/bibtex/publications/papers/Open-vSwitch-CloudNet-14.pdf}{\textit{Performance Characteristics of Virtual Switching}}.
+\end{enumerate}
 
 \end{document}
