@@ -40,7 +40,8 @@
     showspaces=false,                
     showstringspaces=false,
     showtabs=false,                  
-    tabsize=2
+    tabsize=2,
+    mathescape=true
 }
 
 \lstset{style=mystyle, extendedchars=\true, literate=
@@ -167,6 +168,7 @@
 машин или индивидуальном их использовании для решения не слишком сложных задач.\\
 
 Самые очевидные применения:
+
 \begin{enumerate}
     \item Эмуляция физической машины с архитектурой или операционной системой, отличной от той,
     что есть на хозяйской системе. Так мы можем запускать ПО, отсутствующее на хозяйской
@@ -179,6 +181,7 @@
 
 Однако существуют задачи, для решения которых одной виртуальной машины или даже одного
 гипервизора недостаточно. В частности:
+
 \begin{enumerate}
     \item Требуемая вычислительная мощность системы превышает мощность любой отдельно взятой
     физической машины. Решение состоит в использовании кластера вычислительных машин с
@@ -290,14 +293,14 @@
 \end{enumerate}
 
 Важно отметить, что перенос ВМ с одного сервера на другой происходит практически незаметно.
-
+\vspace{0.3cm}
 \begin{lstlisting}
-$ ping 192.168.122.88
+$\textdollar$ ping 192.168.122.88
 64 bytes from 192.168.122.88: icmp_seq=637 ttl=64 time=1.00 ms
 64 bytes from 192.168.122.88: icmp_seq=638 ttl=64 time=0.570 ms
 64 bytes from 192.168.122.88: icmp_seq=639 ttl=64 time=0.473 ms
 64 bytes from 192.168.122.88: icmp_seq=640 ttl=64 time=0.529 ms
-64 bytes from 192.168.122.88: icmp_seq=641 ttl=64 time=5.35 ms <- Миграция
+64 bytes from 192.168.122.88: icmp_seq=641 ttl=64 time=5.35 ms <- Миграция 
 64 bytes from 192.168.122.88: icmp_seq=643 ttl=64 time=0.455 ms
 64 bytes from 192.168.122.88: icmp_seq=644 ttl=64 time=0.255 ms
 64 bytes from 192.168.122.88: icmp_seq=645 ttl=64 time=0.417 ms
@@ -356,12 +359,12 @@ $ ping 192.168.122.88
 составляющая кворум, продолжает нормальное функционирование, а также предпринимает попытку
 отключить или заблокировать вторую группу машин.\\
 
-\href{https://ru.wikipedia.org/wiki/Кворум}{Кворум} (лат. quorum praesentia sufficit — «которых присутствие достаточно») — установленное
+\href{https://ru.wikipedia.org/wiki/Кворум}{\underbar{Кворум}} (лат. quorum praesentia sufficit — «которых присутствие достаточно») — установленное
 законом, уставом организации или регламентом число участников собрания (заседания), достаточное
 для признания данного собрания правомочным принимать решения по вопросам его повестки дня.\\
 
 Машины вне кворума должны добровольно остановить свою работу. Процесс изоляции машин вне
-группы кворума называется \href{https://en.wikipedia.org/wiki/Fencing_(computing).}{ограждением} (от англ. fencing). В англоязычной литературе также
+группы кворума называется \href{https://en.wikipedia.org/wiki/Fencing_(computing).}{\underbar{ограждением}} (от англ. fencing). В англоязычной литературе также
 используются акронимы STONITH (Shoot The Other Node In The Head — «стреляй другому узлу в
 голову») или STOMITH (Shoot The Other Machine In The Head — «стреляй другой машине в голову»). В
 любом случае подразумевается максимально жёсткий метод вывода из строя узлов, то есть серверов,
@@ -382,6 +385,7 @@ $ ping 192.168.122.88
 этим сетевым накопителем считается кворумом.\\
 
 При реализации кластеров с высокой доступностью важно иметь в виду следующие аспекты:
+
 \begin{enumerate}
     \item Данные, с которыми происходит работа, и сама операционная система, используемая в ВМ,
     должны храниться на общедоступном ресурсе. То есть не на локальном диске данного
@@ -394,7 +398,7 @@ $ ping 192.168.122.88
 \end{enumerate}
 
 \begin{lstlisting}
-$ ping 192.168.122.188
+$\textdollar$ ping 192.168.122.188
 64 bytes from 192.168.122.188: icmp_seq=25 ttl=64 time=0.811 ms
 64 bytes from 192.168.122.188: icmp_seq=26 ttl=64 time=0.355 ms
 From 192.168.122.1 icmp_seq=58 Destination Host Unreachable
@@ -477,11 +481,13 @@ VMware Fault Tolerance — одна из наиболее известных с�
 
 \begin{figure}[h]
     \centering
-    \scalebox{0.5}{\includegraphics[width=1\textwidth]{7.png}}\\ 
+    \scalebox{0.75}{\includegraphics[width=1\textwidth]{7.png}}\\ 
     \small\textit{Модель кластера из виртуальных машин поверх гипервизора VMware ESXi под управлением VMware vCenter
     Server, \href{https://docs.vmware.com/en/VMware-vSphere/index.html}{VMware vSphere Documentation}}  
     \label{framework} 
 \end{figure}
+
+\newpage
 
 \begin{figure}[h]
     \centering
@@ -588,7 +594,7 @@ Server Standard и т. д. Также подписчикам предостав�
 надстройка над Linux-дистрибутивом Debian, реализующая веб-интерфейс управления, а также набор
 системных утилит и демонов для управления кластером.
 
-\newpage
+% \newpage
 
 \begin{figure}[h]
     \centering
@@ -642,6 +648,7 @@ Server Standard и т. д. Также подписчикам предостав�
     \item Создание групп узлов, обеспечивающих высокую доступность (High Availability) виртуальных
     окружений.
 \end{enumerate}
+\vspace{0.35cm}
 
 По сравнению с предложением VMware есть у Proxmox и некоторые недостатки:
 \begin{enumerate}
@@ -689,14 +696,14 @@ Server Standard и т. д. Также подписчикам предостав�
 устройства — по сути, диска, доступного по сети. И тут самое простое решение — это
 iSCSI-накопитель.\\
 
-\href{https://ru.wikipedia.org/wiki/ISCSI}{\textbf{iSCSI}} (англ. Internet Small Computer System Interface) — протокол, который базируется на TCP/IP и
+\href{https://ru.wikipedia.org/wiki/ISCSI}{\underbar{\textbf{iSCSI}}} (англ. Internet Small Computer System Interface) — протокол, который базируется на TCP/IP и
 разработан для установления взаимодействия и управления системами хранения данных, серверами
 и клиентами.\\
 
 Можно либо использовать имеющееся подобное устройство в сети (многие NAS), либо создать такое
 устройство самостоятельно на любом компьютере, подключённом к сети.\\
 
-\href{https://ru.wikipedia.org/wiki/NAS}{\textbf{NAS}} (англ. Network Attached Storage) — сервер для хранения данных на файловом уровне. По сути,
+\href{https://ru.wikipedia.org/wiki/NAS}{\underbar{\textbf{NAS}}} (англ. Network Attached Storage) — сервер для хранения данных на файловом уровне. По сути,
 представляет собой компьютер с некоторым дисковым массивом, подключённый к сети (обычно
 локальной) и поддерживающий работу по принятым в ней протоколам.\\
 
@@ -739,9 +746,11 @@ iSCSI-накопитель.\\
 серверной виртуализации на одной физической машине, используя вложенную виртуализацию. Наша
 система будет выглядеть следующим образом:
 
+\newpage
+
 \begin{figure}[h]
     \centering
-    \scalebox{0.9}{\includegraphics[width=1\textwidth]{12.png}}\\ 
+    \scalebox{0.8}{\includegraphics[width=1\textwidth]{12.png}}\\ 
     \label{framework} 
 \end{figure}
 
@@ -813,6 +822,7 @@ Microsoft Hyper-V, и Xen. Но мы будем использовать KVM к�
 на английском языке и сами \href{https://www.proxmox.com/en/downloads}{установочные образы}.
 
 
+
 \subsubsection*{Создание лабораторного стенда} 
 \addcontentsline{toc}{subsubsection}{Создание лабораторного стенда}
 
@@ -840,60 +850,56 @@ Proxmox, нам придётся его найти или подготовить
 начинающиеся с символа \$, — это непосредственно команды, которые необходимо выполнить в
 консоли. Причём сам символ \$ вводить не следует. Остальные же строки (без префиксов) — это
 реакция системы на введённую выше команду.
-
-\begin{lstlisting}
-    # Установим утилиты для работы с iSCSI-устройством в качестве сервера.
-    $ sudo apt-get install tgt
-    
-    # Установим утилиты для работы с iSCSI-устройством в качестве клиента.
-    $ sudo apt-get install open-iscsi
-    
-    # Создаём рабочую директорию.
-    # Тут будет находиться только образ экспортируемого по сети диска.
-    $ mkdir -p ~/Projects/virtualization/
-    
-    # Создать пустой образ размером 100 Гбайт.
-    $ dd if=/dev/zero of=disk.img count=0 bs=1 seek=100G
-    
-    # Создать новый iSCSI-сервер.
-    $ sudo tgtadm --lld iscsi --op new --mode target --tid 1 -T iqn.com.example:vpe
-    
-    # Подключить новый диск к серверу.
-    $ sudo tgtadm --lld iscsi --op new --mode logicalunit --tid 1 --lun 1 -b
-    ~/Projects/virtualization/disk.img
-    
-    # Сделать доступным любым клиентам.
-    $ sudo tgtadm --lld iscsi --op bind --mode target --tid 1 -I ALL
-
-\end{lstlisting}
-
-
 \newpage
 \begin{lstlisting}
+# Установим утилиты для работы с iSCSI-устройством в качестве сервера.
+$\textdollar$ sudo apt-get install tgt
+    
+# Установим утилиты для работы с iSCSI-устройством в качестве клиента.
+$\textdollar$ sudo apt-get install open-iscsi
+    
+# Создаём рабочую директорию.
+# Тут будет находиться только образ экспортируемого по сети диска.
+$\textdollar$ mkdir -p $\sim$/Projects/virtualization/
+    
+# Создать пустой образ размером 100 Гбайт.
+$\textdollar$ dd if=/dev/zero of=disk.img count=0 bs=1 seek=100G
+       
+# Создать новый iSCSI-сервер.
+$\textdollar$ sudo tgtadm --lld iscsi --op new --mode target --tid 1 -T iqn.com.examp
+le:vpe
+ 
+# Подключить новый диск к серверу.
+$\textdollar$ sudo tgtadm --lld iscsi --op new --mode logicalunit --tid 1 --lun 1 -b
+$\sim$/Projects/virtualization/disk.img
+    
+# Сделать доступным любым клиентам.
+$\textdollar$ sudo tgtadm --lld iscsi --op bind --mode target --tid 1 -I ALL
 
 # Проверить, видны ли экспортированные диски.
-$ sudo iscsiadm -m discovery -t sendtargets -p localhost
+$\textdollar$ sudo iscsiadm -m discovery -t sendtargets -p localhost
 
 # Открываем порт 3260 в Firewall для доступа к iSCSI.
-$ sudo ufw allow 3260
+$\textdollar$ sudo ufw allow 3260
 
 # Подключаемся к iSCSI-устройству в качестве клиента.
-# Это нужно для подготовки диска (LVM) и размещения на нем локальных накопителей
-виртуальных серверов Proxmox.
-$ sudo iscsiadm -m node -T iqn.com.example:vpe -p localhost -l
+# Это нужно для подготовки диска (LVM) и размещения на нем локальных 
+накопителей виртуальных серверов Proxmox.
+$\textdollar$ sudo iscsiadm -m node -T iqn.com.example:vpe -p localhost -l
 
 # Проверим, создалась ли сессия.
-$ sudo iscsiadm -m session -o show
+$\textdollar$ sudo iscsiadm -m session -o show
 tcp: [17] 127.0.0.1:3260,1 iqn.com.example:vpe (non-flash)
 
 # Создадим том LVM.
-$ sudo pvcreate /dev/sdb
+$\textdollar$ sudo pvcreate /dev/sdb
 Physical volume "/dev/sdb" successfully created.
 
 # Создадим группу vg_iscsi, которую будем использовать.
-$ sudo vgcreate vg_iscsi /dev/sdb
+$\textdollar$ sudo vgcreate vg_iscsi /dev/sdb
 Volume group "vg_iscsi" successfully created
 \end{lstlisting}
+\vspace{0.2cm}
 
 Теперь наш сетевой диск готов к использованию. Мы можем приступить к созданию виртуальных
 серверов с Proxmox.
@@ -901,19 +907,20 @@ Volume group "vg_iscsi" successfully created
 \paragraph*{Создание виртуальных серверов с Proxmox} \mbox{}\\
 \addcontentsline{toc}{paragraph}{Создание виртуальных серверов с Proxmox}
 
-Для каждого сервера нам необходимо подготовить раздел на сетевом диске, где будет содержаться
+\noindent Для каждого сервера нам необходимо подготовить раздел на сетевом диске, где будет содержаться
 корневая файловая система сервера.
-
+\newpage
 \begin{lstlisting}
 # Создадим раздел "lv_pve1" размером 10 Гбайт в LVM-группе "vg_iscsi"
-$ sudo lvcreate -n lv_pve1 -L 10G vg_iscsi
+$\textdollar$ sudo lvcreate -n lv_pve1 -L 10G vg_iscsi
 \end{lstlisting}
+\vspace{0.2cm}
 
-Создадим ВМ со следующими параметрами:
+\noindent Создадим ВМ со следующими параметрами:
 \begin{itemize}
     \item название — pve1 (--name=pve1);
     \item 2 виртуальных ядра (--vcpus=2);
-    \item процессор такой же, как в хозяйской системе
+    \item процессор такой же, как в хозяйской системе\\
     (--cpu=host-passthrough,cache.mode=passthrough);
     \item 2 Гбайт ОЗУ (--memory=2048);
     \item накопитель размером 10 Гбайт с корневой файловой системой будет расположен в ранее
@@ -922,30 +929,32 @@ $ sudo lvcreate -n lv_pve1 -L 10G vg_iscsi
     расположен в папке $\mathtt{\sim}$/Projects/virtualization/isos \\
     (--cdrom=isos/proxmox-ve\_6.1-1.iso).
 \end{itemize}
+\vspace{0.3cm}
 
 Следующие операции можно было бы выполнить из графического интерфейса Virtual Machine
 Manager, но вместо дюжины картинок можно обойтись одной строчкой в командной строке:
+\vspace{0.3cm}
 \begin{lstlisting}
-$ virt-install --name=pve1 --vcpus=2
+$\textdollar$ virt-install --name=pve1 --vcpus=2
 --cpu=host-passthrough,cache.mode=passthrough --memory=2048 --disk
 path=/dev/vg_iscsi/lv_pve1,size=10 --cdrom=isos/proxmox-ve_6.1-1.iso   
 \end{lstlisting}
+\vspace{0.2cm}
 
 Результатом выполнения последней команды должно стать создание ВМ и её запуск. При этом
 должно появиться окно с графическим установщиком Proxmox.
 
 \begin{figure}[h]
     \centering
-    \scalebox{0.6}{\includegraphics[width=1\textwidth]{13.png}}\\
+    \scalebox{0.505}{\includegraphics[width=1\textwidth]{13.png}}\\
     \small\textit{Старт установщика Proxmox в виртуальной машине}  
     \label{framework} 
 \end{figure}
 
 Теперь можно пройти по шагам процедуру установки Proxmox, перезагрузить ВМ.
-
 \begin{figure}[h]
     \centering
-    \scalebox{0.6}{\includegraphics[width=1\textwidth]{14.png}}\\
+    \scalebox{0.7}{\includegraphics[width=1\textwidth]{14.png}}\\
     \small\textit{Процедура установки окончена, необходимо перезагрузить ВМ}  
     \label{framework} 
 \end{figure}
@@ -954,30 +963,34 @@ path=/dev/vg_iscsi/lv_pve1,size=10 --cdrom=isos/proxmox-ve_6.1-1.iso
 
 \begin{figure}[h]
     \centering
-    \scalebox{0.8}{\includegraphics[width=1\textwidth]{15.png}}\\
+    \scalebox{0.7}{\includegraphics[width=1\textwidth]{15.png}}\\
     \small\textit{Веб-интерфейс управления Proxmox}  
     \label{framework} 
 \end{figure}
 
 Итак, первый Proxmox-сервер готов. Осталось повторить ту же процедуру для ещё двух серверов, и
 можно будет объединять серверы в кластер.
-
+\vspace{0.15cm}
 \begin{lstlisting}
 # Создадим разделы "lv_pve2" и "lv_pve3" размером 10 Гбайт в LVM-группе
 "vg_iscsi".
-$ sudo lvcreate -n lv_pve2 -L 10G vg_iscsi
-$ sudo lvcreate -n lv_pve3 -L 10G vg_iscsi
-
+$\textdollar$ sudo lvcreate -n lv_pve2 -L 10G vg_iscsi
+\end{lstlisting}
+\newpage
+\begin{lstlisting}
+$\textdollar$ sudo lvcreate -n lv_pve3 -L 10G vg_iscsi
+   
 # Создадим второй сервер Proxmox.
-$ virt-install --name=pve2 --vcpus=2
+$\textdollar$ virt-install --name=pve2 --vcpus=2
 --cpu=host-passthrough,cache.mode=passthrough --memory=2048 --disk
 path=/dev/vg_iscsi/lv_pve2,size=10 --cdrom=isos/proxmox-ve_6.1-1.iso
 
 # Создадим третий сервер Proxmox.
-$ virt-install --name=pve3 --vcpus=2
+$\textdollar$ virt-install --name=pve3 --vcpus=2
 --cpu=host-passthrough,cache.mode=passthrough --memory=2048 --disk
 path=/dev/vg_iscsi/lv_pve3,size=10 --cdrom=isos/proxmox-ve_6.1-1.iso
 \end{lstlisting}
+\vspace{0.2cm}
 
 Готовые узлы (виртуальные серверы Proxmox) легко вводятся в кластер, если следовать инструкциям
 в соответствующей \href{https://pve.proxmox.com/wiki/Cluster_Manager#pvecm_join_node_to_cluster}{статье «Википедии» Proxmox}.\\
@@ -989,7 +1002,6 @@ HTTPS-соединения, на сертификат кластера, а по�
 необходимости иметь доступ к веб-интерфейсу всех узлов, введённых в кластер, так как управление
 ими можно осуществлять из веб-интерфейса любого узла.\\
 
-\newpage
 
 \begin{figure}[h]
     \centering
@@ -1000,23 +1012,26 @@ HTTPS-соединения, на сертификат кластера, а по�
 
 В таком кластере можно уже устанавливать и запускать контейнеры и ВМ, но без внешнего диска не
 получится попробовать миграцию. Тогда мы подключим ранее подготовленный iSCSI-диск.
-
+\newpage
 \begin{figure}[h]
     \centering
-    \scalebox{0.6}{\includegraphics[width=1\textwidth]{17.png}}\\
+    \scalebox{0.8}{\includegraphics[width=1\textwidth]{17.png}}\\
     \label{framework} 
 \end{figure}
 
+
 Добавим iSCSI-устройство. В поле Portal необходимо указать адрес хозяйской системы в подсети
 виртуальных машин. Его можно посмотреть у сетевого моста, используемого KVM:
-
+\vspace{0.3cm}
 \begin{lstlisting}
-$ ip -4 addr show virbr0
-4: virbr0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP
+$\textdollar$ ip -4 addr show virbr0
+4: virbr0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state 
+UP
 group default qlen 1000
-    inet 192.168.122.1/24 brd 192.168.122.255 scope global virbr0
+    inet $\mathbf{192.168.122.1}$/24 brd 192.168.122.255 scope global virbr0
     valid_lft forever preferred_lft forever
 \end{lstlisting}
+\vspace{0.2cm}
 
 В выпадающем меню Target нужно выбрать название сервера iSCSI (iqn.com.example:vpe), которое мы
 задали при его создании.
@@ -1030,6 +1045,8 @@ group default qlen 1000
 Затем добавим накопитель с LVM. Именно его мы будем использовать для установки контейнеров и
 ВМ в окружении Proxmox. Нам нужно выбрать в выпадающем меню только группу LVM-томов
 (vg\_iscsi), которую мы создали на внешнем диске ранее.
+
+\newpage
 
 \begin{figure}[h]
     \centering
@@ -1047,8 +1064,6 @@ group default qlen 1000
 
 Можно обратить внимание, что 30\%, то есть 30 Гбайт, диска iSCSI-LVM уже занято. Это как раз
 образы файловых систем Proxmox-серверов.
-
-\newpage
 
 \paragraph*{Создание виртуальной машины} \mbox{}\\
 \addcontentsline{toc}{paragraph}{Создание виртуальной машины}
@@ -1084,8 +1099,6 @@ group default qlen 1000
 качестве накопителя сетевой диск. Причём выбирать нужно не само iSCSI-устройство, а накопитель с
 томами LVM (iSCSI-LVM).
 
-\newpage
-
 \begin{figure}[h]
     \centering
     \scalebox{0.7}{\includegraphics[width=1\textwidth]{23.png}}\\
@@ -1096,6 +1109,8 @@ group default qlen 1000
 С контейнерами дело обстоит ещё проще. Proxmox предоставляет набор шаблонов (templates) для
 создания контейнеров из самых популярных Linux-дистрибутивов. Достаточно просто выбрать что-то
 на свой вкус и загрузить на локальный диск Proxmox-сервера.
+
+\newpage
 
 \begin{figure}[h]
     \centering
@@ -1145,17 +1160,18 @@ group default qlen 1000
 системы (Virtual Machine Manager) принудительно остановите соответствующий виртуальный
 Proxmox-сервер.
 
+% \begin{figure}[h]
+%     \centering
+%     \scalebox{0.6}{\includegraphics[width=1\textwidth]{28.png}}\\ 
+%     \small\textit{Отключение одного из виртуальных серверов Proxmox}  
+%     \label{framework} 
+% \end{figure}
+
 \begin{figure}[h]
     \centering
     \scalebox{0.8}{\includegraphics[width=1\textwidth]{28.png}}\\ 
-    \small\textit{Отключение одного из виртуальных серверов Proxmox}  
-    \label{framework} 
-\end{figure}
-
-\newpage
-
-\begin{figure}[h]
-    \centering
+    \small\textit{Отключение одного из виртуальных серверов Proxmox}\\
+    \vspace{0.5cm}
     \scalebox{0.19}{\includegraphics[width=1\textwidth]{29.png}}
     \scalebox{0.8}{\includegraphics[width=1\textwidth]{30.png}}\\ 
     \small\textit{Перезапуск ВМ на работающем узле кластера}  
@@ -1175,12 +1191,12 @@ Proxmox-сервер.
 Всё перечисленное выше — это лишь базовые возможности, предоставляемые Proxmox. Кроме того,
 Proxmox поддерживает использование ZFS и CEPH.\\
 
-\href{https://ru.wikipedia.org/wiki/ZFS}{\textbf{ZFS}} (Zettabyte File System) — файловая система, изначально созданная в Sun Microsystems для
+\href{https://ru.wikipedia.org/wiki/ZFS}{\underbar{\textbf{ZFS}}} (Zettabyte File System) — файловая система, изначально созданная в Sun Microsystems для
 операционной системы Solaris. В настоящее время становится весьма популярной в системах
 хранения данных, поскольку считается, что она обеспечивает исключительно высокую надёжность
 сохранения данных, поддерживая их целостность.
 
-\href{https://ru.wikipedia.org/wiki/Ceph}{\textbf{Ceph}} — свободная программная объектная сеть хранения (англ. object storage), обеспечивающая как
+\href{https://ru.wikipedia.org/wiki/Ceph}{\underbar{\textbf{Ceph}}} — свободная программная объектная сеть хранения (англ. object storage), обеспечивающая как
 файловый, так и блочный интерфейсы доступа. По сути, отказоустойчивое распределённое
 хранилище данных, работающее по протоколу TCP.\\
 
@@ -1203,10 +1219,10 @@ vSphere.\\
 oVirt, как и Proxmox, использует гипервизор KVM, поддерживает разнообразные файловые системы и
 накопители: GlusterFS, NFS, iSCSI и т. д.\\
 
-\href{https://ru.wikipedia.org/wiki/GlusterFS}{\textbf{GlusterFS}} — это распределённая, параллельная, линейно масштабируемая файловая система с
+\href{https://ru.wikipedia.org/wiki/GlusterFS}{\underbar{\textbf{GlusterFS}}} — это распределённая, параллельная, линейно масштабируемая файловая система с
 возможностью защиты от сбоев.\\
 
-\href{https://ru.wikipedia.org/wiki/Network_File_System}{\textbf{Network File System}} (NFS) — протокол сетевого доступа к файловым системам. Первоначально
+\href{https://ru.wikipedia.org/wiki/Network_File_System}{\underbar{\textbf{Network File System}}} (NFS) — протокол сетевого доступа к файловым системам. Первоначально
 разработан Sun Microsystems в 1984 году. Позволяет подключать (монтировать) удалённые файловые
 системы через сеть.\\
 
@@ -1215,20 +1231,20 @@ oVirt, как и Proxmox, использует гипервизор KVM, под�
 координирующий работу узлов oVirt-инфраструктуры. И, соответственно, минимальный состав
 системы включает в себя один узел и один Engine.\\
 
-\href{https://www.ovirt.org/download/node.html}{\textbf{oVirt Node}} — это минималистичная ОС, основанная на CentOS, предназначенная для работы в
+\href{https://www.ovirt.org/download/node.html}{\underbar{\textbf{oVirt Node}}} — это минималистичная ОС, основанная на CentOS, предназначенная для работы в
 качестве одного из узлов oVirt.\\
 
 oVirt Engine чем-то сильно напоминает VMware vCenter Server. Интересно, что в отличие от продуктов
 VMware vSphere и oVirt, в ProxMox управление кластером можно осуществлять с любого узла.
 
-\newpage
-
 \begin{figure}[h]
     \centering
-    \scalebox{0.7}{\includegraphics[width=1\textwidth]{31.png}}\\ 
+    \scalebox{0.8}{\includegraphics[width=1\textwidth]{31.png}}\\ 
     \small\textit{\href{https://www.ovirt.org/develop/architecture/architecture.html}{Архитектура oVirt}}  
     \label{framework} 
 \end{figure}
+
+\newpage
 
 \begin{figure}[h]
     \centering
@@ -1274,15 +1290,15 @@ VMware vSphere и oVirt, в ProxMox управление кластером мо
 \addcontentsline{toc}{section}{Используемые источники}
 
 \begin{enumerate}
-    \item \href{https://www.amazon.com/Mastering-VMware-vSphere-Nick-Marshall/dp/1119512948}{Mastering VMware vSphere 6.7.}
-    \item \href{https://www.amazon.com/VMware-vSphere-6-7-Cookbook-orchestrate/dp/1789953006}{VMware vSphere 6.7 Cookbook.}
-    \item \href{https://docs.vmware.com/en/VMware-vSphere/index.html}{VMware vSphere Documentation}.
-    \item \href{https://medium.com/@alexander.bazhenov/установка-vmware-vcenter-server-appliance-5beb779ff2c3}{Установка VMware vCenter Server Appliance и создание кластера vSphere}.
-    \item \href{https://www.usenix.org/legacy/event/nsdi08/tech/full_papers/cully/cully_html/index.html}{Remus: High Availability via Asynchronous Virtual Machine Replication}.
-    \item \href{https://www.vmgu.ru/ext/books/vsphere-ha-deepdive.pdf}{VMware vSphere 6.x HA Deepdive}.
-    \item \href{https://www.packtpub.com/product/mastering-proxmox-second-edition/9781785888243}{Mastering Proxmox - Third Edition}.
-    \item \href{http://onreader.mdl.ru/MasteringProxmox.3ed/content/index.html}{Proxmox. Полное руководство}.
-    \item \href{https://subscription.packtpub.com/search?query=getting%20started%20ovirt%2033}{Getting Started with oVirt 3.3}.
+    \item \href{https://www.amazon.com/Mastering-VMware-vSphere-Nick-Marshall/dp/1119512948}{\textit{Mastering VMware vSphere 6.7.}}
+    \item \href{https://www.amazon.com/VMware-vSphere-6-7-Cookbook-orchestrate/dp/1789953006}{\textit{VMware vSphere 6.7 Cookbook.}}
+    \item \href{https://docs.vmware.com/en/VMware-vSphere/index.html}{\textit{VMware vSphere Documentation}}.
+    \item \href{https://medium.com/@alexander.bazhenov/установка-vmware-vcenter-server-appliance-5beb779ff2c3}{\textit{Установка VMware vCenter Server Appliance и создание кластера vSphere}}.
+    \item \href{https://www.usenix.org/legacy/event/nsdi08/tech/full_papers/cully/cully_html/index.html}{\textit{Remus: High Availability via Asynchronous Virtual Machine Replication}}.
+    \item \href{https://www.vmgu.ru/ext/books/vsphere-ha-deepdive.pdf}{\textit{VMware vSphere 6.x HA Deepdive}}.
+    \item \href{https://www.packtpub.com/product/mastering-proxmox-second-edition/9781785888243}{\textit{Mastering Proxmox - Third Edition}}.
+    \item \href{http://onreader.mdl.ru/MasteringProxmox.3ed/content/index.html}{\textit{Proxmox. Полное руководство}}.
+    \item \href{https://subscription.packtpub.com/search?query=getting%20started%20ovirt%2033}{\textit{Getting Started with oVirt 3.3}}.
 \end{enumerate}
 
 
